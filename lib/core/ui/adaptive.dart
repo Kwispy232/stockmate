@@ -120,7 +120,11 @@ class AppButton extends StatelessWidget {
                   : secondary
                   ? context.colors.surfaceContainerHighest
                   : context.colors.primary,
-              foregroundColor: secondary ? context.colors.onSurface : Colors.white,
+              foregroundColor: danger
+                  ? context.colors.onError
+                  : secondary
+                  ? context.colors.onSurface
+                  : context.colors.onPrimary,
               padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
               borderRadius: BorderRadius.circular(14),
               onPressed: callback,

@@ -127,7 +127,9 @@ class _InventoryDetailScreenState extends ConsumerState<InventoryDetailScreen> {
                 color: filter == index
                     ? context.colors.primary
                     : context.colors.surfaceContainerHighest,
-                foregroundColor: filter == index ? Colors.white : context.colors.onSurface,
+                foregroundColor: filter == index
+                    ? context.colors.onPrimary
+                    : context.colors.onSurface,
                 borderRadius: BorderRadius.circular(10),
                 onPressed: () => setState(() => filter = index),
                 child: Text(label),
