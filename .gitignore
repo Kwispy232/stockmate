@@ -1,0 +1,65 @@
+# Dart and Flutter
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+coverage/
+**/doc/api/
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+.private/
+config/*.json
+!config/*.example.json
+*.jks
+*.keystore
+*.p8
+*.p12
+*.mobileprovision
+android/key.properties
+android/local.properties
+
+# Apple generated files
+**/Pods/
+**/.symlinks/
+**/Flutter/ephemeral/
+**/Flutter/Generated.xcconfig
+**/Flutter/flutter_export_environment.sh
+**/Flutter/.last_build_id
+**/Flutter/App.framework/
+**/Flutter/Flutter.framework/
+**/Flutter/Flutter.podspec
+**/Flutter/GeneratedPluginRegistrant.swift
+**/Runner/GeneratedPluginRegistrant.*
+**/xcuserdata/
+**/*.xcuserstate
+DerivedData/
+
+# Android generated files
+**/.gradle/
+**/captures/
+**/gradle/wrapper/gradle-wrapper.jar
+
+# Supabase machine state
+supabase/.temp/
+supabase/.branches/
+supabase/.env
+supabase/.env.*
+
+# Tooling and OS
+.idea/
+*.iml
+.fvm/flutter_sdk
+.bundle/
+vendor/bundle/
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/
+fastlane/test_output/
+.DS_Store
+*.log
