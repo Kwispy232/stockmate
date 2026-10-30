@@ -10,6 +10,15 @@ import 'support/test_app.dart';
 
 Future<void> tapVisible(WidgetTester tester, Finder finder) async {
   if (finder.evaluate().isEmpty) {
+    final scrollable = find
+        .byWidgetPredicate(
+          (widget) => widget is Scrollable && widget.axisDirection == AxisDirection.down,
+        )
+        .last;
+    tester.state<ScrollableState>(scrollable).position.jumpTo(0);
+    await tester.pumpAndSettle();
+  }
+  if (finder.evaluate().isEmpty) {
     await tester.scrollUntilVisible(
       finder,
       250,

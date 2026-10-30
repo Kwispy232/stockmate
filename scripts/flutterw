@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+if [ -n "${FLUTTER_SDK:-}" ]; then
+  exec "$FLUTTER_SDK/bin/flutter" "$@"
+elif command -v flutter >/dev/null 2>&1; then
+  exec flutter "$@"
+elif [ -x .fvm/flutter_sdk/bin/flutter ]; then
+  exec .fvm/flutter_sdk/bin/flutter "$@"
+elif [ -x ../flutter-sdk/bin/flutter ]; then
+  exec ../flutter-sdk/bin/flutter "$@"
+fi
+
+echo 'Install the Flutter version in .flutter-version or set FLUTTER_SDK.' >&2
+exit 1
