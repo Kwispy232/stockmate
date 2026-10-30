@@ -92,7 +92,8 @@ web3 = 30
 [auth.email]
 enable_signup = true
 double_confirm_changes = true
-enable_confirmations = true
+# Public portfolio demo: no SMTP service or email ownership claims.
+enable_confirmations = false
 secure_password_change = false
 max_frequency = "1m"
 otp_length = 8

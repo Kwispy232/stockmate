@@ -36,9 +36,9 @@ try:
     for _ in range(2):
         email = f'stockmate-check-{uuid.uuid4().hex}@example.invalid'
         password = secrets.token_urlsafe(32)
-        user = request('POST', '/auth/v1/admin/users',
-                       {'email': email, 'password': password, 'email_confirm': True}, admin=True)
-        users.append(user['id'])
+        registration = request('POST', '/auth/v1/signup', {'email': email, 'password': password})
+        users.append(registration['user']['id'])
+        assert registration.get('access_token'), 'Demo signup must return a session without SMTP.'
         session = request('POST', '/auth/v1/token?grant_type=password', {'email': email, 'password': password})
         tokens.append(session['access_token'])
 
@@ -60,7 +60,7 @@ try:
     request('POST', '/rest/v1/rpc/submit_inventory', submission, token=tokens[1], expected=403)
     request('PATCH', f'/rest/v1/inventories?id=eq.{inventory_id}', {'title': 'Tampered'}, token=token, expected=403)
     request('GET', '/rest/v1/branches?select=*', expected=401)
-    print('PASS: real authentication, membership, atomic submit, safe retry, RLS isolation, immutable submissions, and anonymous denial.')
+    print('PASS: public signup, password sign-in, membership, atomic submit, safe retry, RLS isolation, immutable submissions, and anonymous denial.')
 finally:
     for user_id in users:
         request('DELETE', f'/auth/v1/admin/users/{user_id}', admin=True)

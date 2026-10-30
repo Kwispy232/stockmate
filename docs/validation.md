@@ -8,7 +8,7 @@ Observed locally on 30 October 2026 with Flutter 3.47.9 / Dart 3.13.7, Xcode 27.
 | 18 domain, file-backed repository and adaptive widget tests | Passed; includes restart, disk-write failure, retry identity, independent queue failures and workspace exit |
 | Native integration | Passed on a dedicated iPhone 18 Pro / iOS 27.0 simulator; offline queue and reconnection |
 | Hosted SQL assertions | Passed in a rolled-back transaction |
-| Hosted Auth/REST check | Passed with two temporary accounts; accounts and submissions removed afterward |
+| Hosted Auth/REST check | Passed with two public signups and password sign-ins; accounts and submissions removed afterward |
 | Supabase security advisor | No issues reported after schema deployment |
 | Android fastlane lane | Produced an installable ARM64 release APK |
 | iOS fastlane lane | Produced an unsigned debug simulator archive; Runner contains arm64 and x86_64 |

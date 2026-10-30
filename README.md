@@ -19,7 +19,7 @@ flutter run
 
 Choose **Explore the demo**. It needs no account, credentials, network, or backend setup. The bundled catalogue contains two stores with 30 products each. `scripts/flutterw run` also works with `FLUTTER_SDK`, FVM, or a sibling `flutter-sdk` checkout.
 
-For the hosted workspace, create an email account, confirm it if requested, and sign in. Every account gets the two sample stores; submissions are private to their author. The checked-in Supabase publishable key is public client configuration, protected by RLS. Privileged keys and database credentials are never app configuration.
+For the hosted workspace, register with an email and password. This nonproduction demo signs you in immediately without email confirmation or an SMTP service; email ownership is not verified. Every account gets the two sample stores; submissions are private to their author. The checked-in Supabase publishable key is public client configuration, protected by RLS. Privileged keys and database credentials are never app configuration.
 
 ## Try the whole workflow
 
