@@ -2,7 +2,7 @@
 
 A Flutter portfolio app for counting retail stock, saving work offline, and submitting inventory counts reliably.
 
-Status: repository bootstrap. The Flutter application will be implemented in small, reviewable stages.
+Status: public repository and hosted Supabase project created. The Flutter application will be implemented in small, reviewable stages.
 
 ## Planned experience
 
@@ -24,3 +24,5 @@ Features group related code. UI, state, domain rules, and persistence remain sep
 GitHub Actions and fastlane will validate the project and publish demo artifacts through GitHub. Android gets an installable demo APK; iOS gets a simulator build. App Store and Google Play configuration are outside this portfolio project's scope.
 
 See [the implementation plan](docs/implementation-plan.md) for stage boundaries, architecture decisions, and testing.
+
+See [backend setup](supabase/README.md) for the demo project's public identifiers and local linking instructions.

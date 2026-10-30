@@ -2,7 +2,7 @@
 
 ## 0. Repository and hosted backend
 
-Create the public repository, ignore local/generated files, create a separate Supabase demo project, and record non-secret project identifiers. No application schema or screens yet.
+Completed: public repository, local/generated file ignores, a separate Supabase demo project, and non-secret project identifiers. The CLI link and a read-only database query were verified. No application schema or screens yet.
 
 ## 1. Flutter foundation
 
