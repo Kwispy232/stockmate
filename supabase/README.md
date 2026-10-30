@@ -29,7 +29,7 @@ The Flutter client uses the publishable key. Database passwords, management toke
 ```sh
 supabase start
 supabase db reset --local
-supabase db query --local --file supabase/tests/security.sql
+bash scripts/check-backend.sh
 ```
 
 The SQL checks run inside a rolled-back transaction. They verify membership, complete/atomic submission, idempotent retries, changed-payload rejection, immutability, invalid quantities, cross-user isolation, branch denial, and anonymous denial. CI runs these against an isolated local stack without production credentials.

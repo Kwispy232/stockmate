@@ -43,7 +43,7 @@ jobs:
           version: 2.101.0
       - run: supabase start -x studio,realtime,storage,imgproxy,edge-runtime,analytics,vector,inbucket,meta
       - run: supabase db reset --local
-      - run: supabase db query --local --file supabase/tests/security.sql
+      - run: bash scripts/check-backend.sh
       - if: always()
         run: supabase stop --no-backup
 
