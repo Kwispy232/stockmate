@@ -1,5 +1,7 @@
 # Implementation plan
 
+All six implementation stages are delivered. Commits follow the foundation, domain, persistence/backend, adaptive UI, verification, and delivery boundaries below. See [the README](../README.md) for run commands and [validation](validation.md) for observed checks.
+
 ## 0. Repository and hosted backend
 
 Completed: public repository, local/generated file ignores, a separate Supabase demo project, and non-secret project identifiers. The CLI link and a read-only database query were verified. No application schema or screens yet.
