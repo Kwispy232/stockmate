@@ -45,6 +45,7 @@ void main() {
     await preferences.setBool('demo_online', false);
     await app.main();
     await tester.pumpAndSettle();
+    debugPrint('Demo ready: creating an inventory.');
     final name = 'Simulator count ${DateTime.now().millisecondsSinceEpoch}';
     await tapVisible(tester, find.byKey(const Key('newInventory')));
     await tester.enterText(find.byKey(const Key('inventoryName')), name);
@@ -56,6 +57,7 @@ void main() {
     await tester.tap(find.text('Confirm').last);
     await tester.pumpAndSettle();
     await tapVisible(tester, find.byKey(const Key('reviewInventory')));
+    debugPrint('Inventory counted: submitting while offline.');
     await tapVisible(tester, find.byKey(const Key('submitInventory')));
     await tester.tap(find.text('Submit inventory').last);
     await tester.pumpAndSettle();
@@ -72,10 +74,19 @@ void main() {
     await tapVisible(tester, find.byKey(const Key('demoConnection')));
     container.read(routerProvider).go('/inventories');
     await tester.pumpAndSettle();
-    final inventories = await container.read(inventoriesProvider.future);
+    debugPrint('Connection restored: waiting for the durable submission.');
+    final inventories = await container
+        .read(repositoryProvider)
+        .watchAll()
+        .firstWhere(
+          (rows) => rows.any(
+            (inventory) => inventory.title == name && inventory.status == InventoryStatus.submitted,
+          ),
+        )
+        .timeout(const Duration(seconds: 30));
     final inventory = inventories.singleWhere((inventory) => inventory.title == name);
     expect(inventory.status, InventoryStatus.submitted);
     expect(inventory.lines.singleWhere((line) => line.sku == 'SM-001').counted, 4);
     expect(tester.takeException(), isNull);
-  });
+  }, timeout: const Timeout(Duration(minutes: 5)));
 }

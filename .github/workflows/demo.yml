@@ -75,15 +75,22 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-      - name: Device integration test
+      - name: Boot matching iOS simulator
+        id: simulator
         if: matrix.platform == 'ios'
+        timeout-minutes: 4
         shell: bash
         run: |
           set -euo pipefail
-          simulator_id=$(xcrun simctl list devices available -j | python3 -c 'import json,sys; print(next(d["udid"] for ds in json.load(sys.stdin)["devices"].values() for d in ds if "iPhone" in d["name"]))')
+          simulator_id=$(python3 scripts/ci_simulator.py)
+          echo "Selected simulator: $simulator_id"
           xcrun simctl boot "$simulator_id" || true
           xcrun simctl bootstatus "$simulator_id" -b
-          flutter test integration_test/demo_flow_test.dart -d "$simulator_id"
+          echo "id=$simulator_id" >> "$GITHUB_OUTPUT"
+      - name: Device integration test
+        if: matrix.platform == 'ios'
+        timeout-minutes: 12
+        run: flutter test integration_test/demo_flow_test.dart --reporter expanded -d '${{ steps.simulator.outputs.id }}'
       - run: bundle exec fastlane ${{ matrix.platform }} demo
         env:
           BUILD_NUMBER: ${{ github.run_number }}
