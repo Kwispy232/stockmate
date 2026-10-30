@@ -1,0 +1,24 @@
+name: Pinned Flutter SDK
+description: Bootstrap the exact official Flutter revision used by this demo.
+runs:
+  using: composite
+  steps:
+    - uses: actions/cache@v4
+      with:
+        path: |
+          .tooling/flutter
+          ~/.pub-cache
+        key: flutter-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('.flutter-revision', 'pubspec.lock') }}
+    - shell: bash
+      run: |
+        set -euo pipefail
+        if [ ! -d .tooling/flutter/.git ]; then
+          git clone --depth 1 --branch "$(cat .flutter-version)" https://github.com/flutter/flutter.git .tooling/flutter
+        fi
+        test "$(git -C .tooling/flutter rev-parse HEAD)" = "$(cat .flutter-revision)"
+        echo "$GITHUB_WORKSPACE/.tooling/flutter/bin" >> "$GITHUB_PATH"
+    - shell: bash
+      run: |
+        flutter config --no-analytics
+        flutter --version
+        flutter pub get --enforce-lockfile

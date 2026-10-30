@@ -1,6 +1,6 @@
 # Working agreements
 
-- Implement one agreed stage at a time. Do not advance into later stages without a user request.
+- Deliver changes in small functional commits. Respect the scope of the user's current request.
 - Keep source code idiomatic, concise, and formatted by dart format. Use descriptive names; comments explain only non-obvious decisions.
 - Group code by feature. Separate widgets, Riverpod state, domain rules, and data access where needed.
 - Add abstractions for a real boundary or a second implementation. Avoid pass-through use cases and interfaces for every class.

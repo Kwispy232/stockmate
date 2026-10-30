@@ -1,28 +1,90 @@
 # StockMate
 
-A Flutter portfolio app for counting retail stock, saving work offline, and submitting inventory counts reliably.
+[![Verify and build demo](https://github.com/Kwispy232/stockmate/actions/workflows/demo.yml/badge.svg)](https://github.com/Kwispy232/stockmate/actions/workflows/demo.yml)
 
-Status: public repository and hosted Supabase project created. The Flutter application will be implemented in small, reviewable stages.
+An offline inventory app built with Flutter. Scan a product, record its quantity, review differences, and submit the count safely after reconnecting.
 
-## Planned experience
+**[Download demo builds](https://github.com/Kwispy232/stockmate/releases)** · **[Browse the implementation plan](docs/implementation-plan.md)**
 
-- Scan a barcode or find a product manually.
-- Record quantities and resume drafts after restarting the app.
-- Compare counted quantities with the expected stock snapshot.
-- Submit counts with retries that cannot create duplicates.
-- Explore an isolated local demo without an account.
-- Use Cupertino conventions on iOS and Material conventions on Android, in Slovak or English.
+## Run
 
-## Selected stack
+Use **Flutter 3.47.9 / Dart 3.13.7**, pinned in `.flutter-version`, `.flutter-revision`, and `.fvmrc`.
 
-Flutter and Dart, Riverpod, go_router, Drift/SQLite, Supabase, Flutter gen_l10n/ARB, flutter_svg, and mobile_scanner. Dependencies and SDK versions will be pinned during Flutter setup.
+```sh
+flutter pub get --enforce-lockfile
+flutter run
+```
 
-Features group related code. UI, state, domain rules, and persistence remain separate within each feature, with extra layers introduced only when useful.
+Choose **Explore the demo**. It needs no account, credentials, network, or backend setup. The bundled catalogue contains two stores with 30 products each. `scripts/flutterw run` also works with `FLUTTER_SDK`, FVM, or a sibling `flutter-sdk` checkout.
 
-## Delivery
+For the hosted workspace, create an email account, confirm it if requested, and sign in. Every account gets the two sample stores; submissions are private to their author. The checked-in Supabase publishable key is public client configuration, protected by RLS. Privileged keys and database credentials are never app configuration.
 
-GitHub Actions and fastlane will validate the project and publish demo artifacts through GitHub. Android gets an installable demo APK; iOS gets a simulator build. App Store and Google Play configuration are outside this portfolio project's scope.
+## Try the whole workflow
 
-See [the implementation plan](docs/implementation-plan.md) for stage boundaries, architecture decisions, and testing.
+1. Start an inventory and choose a store.
+2. Scan a product or search by name, SKU, or barcode. Record a whole-number quantity; zero means explicitly counted, while a blank remains uncounted.
+3. Mark genuinely missing products as zero, then review the differences.
+4. In the local demo, switch **Demo connection** off in Settings and submit. The immutable count stays in the durable sending queue.
+5. Restart the app, reconnect in Settings, and synchronize. The same submission ID is retried.
 
-See [backend setup](supabase/README.md) for the demo project's public identifiers and local linking instructions.
+The local demo simulates transport failures. The authenticated workspace uses real HTTP requests and retains queued work after network failures. Synchronization runs while the inventory screen is active, on app resume, and on request; it is not an OS background service.
+
+## Design
+
+| Concern | Choice |
+| --- | --- |
+| State and dependencies | Riverpod Notifier / AsyncNotifier / StreamProvider |
+| Organization | Feature-first with isolated domain rules |
+| Routes | go_router, auth redirects, Cupertino/Material pages |
+| Offline persistence | Drift / SQLite; transactional snapshot and outbox writes |
+| Backend | Supabase Auth, Postgres, RLS, atomic submission RPC |
+| Models | Freezed and generated JSON serialization |
+| UI | Cupertino controls on iOS, Material 3 on Android, light/dark themes |
+| Languages | Slovak and English ARB resources, plurals and locale-aware dates |
+| Assets and camera | flutter_svg and mobile_scanner with manual barcode fallback |
+| Delivery | GitHub Actions, fastlane, GitHub demo releases |
+
+```mermaid
+flowchart LR
+  UI[Feature UI] --> State[Riverpod controllers]
+  State --> Repo[Inventory repository]
+  Repo --> DB[Drift snapshots + outbox]
+  Repo --> Gateway[Demo / Supabase gateway]
+  Gateway --> RPC[Atomic RPC + RLS]
+```
+
+Feature-first groups related files; dependency boundaries keep domain rules independent of Flutter and persistence. A repository boundary supports the demo, hosted backend, and tests. There is no extra DI container or pass-through use-case layer.
+
+Drafts are editable by their local owner. Queued and submitted counts are immutable. The server checks branch membership, canonical catalogue items, quantities, and completeness in one transaction. A stable UUID and payload fingerprint make retries idempotent and reject changed retries. Demo and authenticated users use separate SQLite files, and gateways reject an account switch.
+
+The sample backend intentionally shares its two read-only catalogues among registered accounts. It demonstrates author/branch access boundaries; it is not a production organization-onboarding system. Only the latest 100 remote submissions are fetched, while local history is retained. Catalogue changes reject stale submissions rather than silently changing their stock snapshot. Collaborative editing and background execution are outside this demo's scope.
+
+## Verify
+
+```sh
+dart run build_runner build
+flutter gen-l10n
+flutter analyze --fatal-infos
+flutter test --coverage
+flutter test integration_test/demo_flow_test.dart -d <simulator-or-device-id>
+```
+
+Domain and file-backed repository tests cover validation, explicit zero counts, disk-write failure, concurrent edits, restart recovery, offline queueing, and lost-response retries. Widget tests exercise both platform styles, validation, submission, Slovak/dark preferences, unknown IDs, and a narrow screen with large text. The native integration test exercises offline submission and reconnection using the real local database and plugins.
+
+Backend checks are documented in [supabase/README.md](supabase/README.md). Physical camera scanning needs a device; manual lookup is available on simulators and when permission is denied.
+
+After committing changes, `bash scripts/check.sh` additionally checks generated output, formatting, and the shared catalogue seed.
+
+## Demo delivery
+
+```sh
+bundle install
+bundle exec fastlane android demo
+bundle exec fastlane ios demo
+```
+
+Android produces an ARM64 release APK with development signing. iOS produces an unsigned debug simulator archive containing both simulator architectures. Outputs and SHA-256/source manifests are under `build/artifacts/`.
+
+PRs run quality and isolated backend checks. Pushes to `develop` also build downloadable Actions artifacts. A push/merge to `main` publishes a GitHub prerelease after the checks, native iOS integration test, and both builds succeed. No store accounts, store credentials, TestFlight, or Google Play configuration are involved.
+
+Generated Freezed/Drift/localization files and lockfiles are committed. `scripts/render_icon.swift` regenerates the original app icons on macOS; `scripts/generate_seed.py` keeps the local and hosted sample catalogues aligned.

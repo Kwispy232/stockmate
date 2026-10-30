@@ -55,6 +55,7 @@ supabase/.env.*
 .idea/
 *.iml
 .fvm/flutter_sdk
+.tooling/
 .bundle/
 vendor/bundle/
 fastlane/report.xml

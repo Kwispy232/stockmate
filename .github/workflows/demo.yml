@@ -1,0 +1,113 @@
+name: Verify and build demo
+
+on:
+  pull_request:
+    branches: [develop, main]
+  push:
+    branches: [develop, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: demo-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+env:
+  FLUTTER_SUPPRESS_ANALYTICS: true
+  DART_SUPPRESS_ANALYTICS: true
+  FASTLANE_SKIP_UPDATE_CHECK: true
+  FASTLANE_OPT_OUT_USAGE: true
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/flutter
+      - run: bash scripts/check.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage/lcov.info
+
+  backend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 2.101.0
+      - run: supabase start -x studio,realtime,storage,imgproxy,edge-runtime,analytics,vector,inbucket,meta
+      - run: supabase db reset --local
+      - run: supabase db query --local --file supabase/tests/security.sql
+      - if: always()
+        run: supabase stop --no-backup
+
+  build:
+    needs: [quality, backend]
+    if: github.event_name != 'pull_request'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: android
+            os: ubuntu-latest
+          - platform: ios
+            os: macos-latest
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/flutter
+      - if: matrix.platform == 'android'
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - if: matrix.platform == 'android'
+        uses: android-actions/setup-android@v3
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Device integration test
+        if: matrix.platform == 'ios'
+        shell: bash
+        run: |
+          set -euo pipefail
+          simulator_id=$(xcrun simctl list devices available -j | python3 -c 'import json,sys; print(next(d["udid"] for ds in json.load(sys.stdin)["devices"].values() for d in ds if "iPhone" in d["name"]))')
+          xcrun simctl boot "$simulator_id" || true
+          xcrun simctl bootstatus "$simulator_id" -b
+          flutter test integration_test/demo_flow_test.dart -d "$simulator_id"
+      - run: bundle exec fastlane ${{ matrix.platform }} demo
+        env:
+          BUILD_NUMBER: ${{ github.run_number }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: demo-${{ matrix.platform }}
+          path: build/artifacts/
+          if-no-files-found: error
+
+  release:
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: demo-*
+          path: release
+          merge-multiple: true
+      - name: Publish GitHub demo release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DEMO_TAG: demo-${{ github.run_number }}
+        run: |
+          gh release create "$DEMO_TAG" release/* --target "$GITHUB_SHA" --prerelease \
+            --title "StockMate demo #${{ github.run_number }}" --notes-file docs/demo-release.md

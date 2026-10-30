@@ -1,0 +1,44 @@
+require 'digest'
+require 'fileutils'
+require 'json'
+require 'shellwords'
+require 'yaml'
+
+def record_artifact(platform, filename)
+  root = File.expand_path('..', __dir__)
+  artifact = File.join(root, 'build', 'artifacts', filename)
+  version = YAML.load_file(File.join(root, 'pubspec.yaml'))['version'].split('+').first
+  metadata = {
+    platform: platform,
+    version: version,
+    build_number: ENV.fetch('BUILD_NUMBER', '1'),
+    commit: ENV['GITHUB_SHA'] || `git -C #{root.shellescape} rev-parse HEAD`.strip,
+    flutter_revision: File.read(File.join(root, '.flutter-revision')).strip,
+    artifact: filename,
+    sha256: Digest::SHA256.file(artifact).hexdigest
+  }
+  File.write(File.join(root, 'build', 'artifacts', "#{platform}-build.json"), JSON.pretty_generate(metadata) + "\n")
+end
+
+platform :android do
+  desc 'Build the installable Android demo APK'
+  lane :demo do
+    sh('flutter', 'build', 'apk', '--release', '--target-platform', 'android-arm64',
+       '--build-number', ENV.fetch('BUILD_NUMBER', '1'))
+    FileUtils.mkdir_p('../build/artifacts')
+    FileUtils.cp('../build/app/outputs/flutter-apk/app-release.apk', '../build/artifacts/StockMate-android.apk')
+    record_artifact('android', 'StockMate-android.apk')
+  end
+end
+
+platform :ios do
+  desc 'Build the iOS simulator demo without signing'
+  lane :demo do
+    sh('flutter', 'build', 'ios', '--simulator', '--debug', '--no-codesign',
+       '--build-number', ENV.fetch('BUILD_NUMBER', '1'))
+    FileUtils.mkdir_p('../build/artifacts')
+    sh('ditto', '-c', '-k', '--sequesterRsrc', '--keepParent',
+       '../build/ios/iphonesimulator/Runner.app', '../build/artifacts/StockMate-ios-simulator.zip')
+    record_artifact('ios', 'StockMate-ios-simulator.zip')
+  end
+end
