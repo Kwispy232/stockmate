@@ -97,6 +97,9 @@ abstract class Inventory with _$Inventory {
   Inventory queue() {
     if (status != InventoryStatus.draft) throw InventoryIssue.locked;
     if (!isComplete) throw InventoryIssue.incomplete;
+    if (lines.any((line) => line.counted! < 0 || line.counted! > 1000000)) {
+      throw InventoryIssue.invalidQuantity;
+    }
     return copyWith(status: InventoryStatus.queued, syncError: null);
   }
 }

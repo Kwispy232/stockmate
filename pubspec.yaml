@@ -34,7 +34,6 @@ dev_dependencies:
   drift_dev: ^2.35.2
   freezed: ^4.0.3
   json_serializable: ^6.15.2
-
 flutter:
   generate: true
   uses-material-design: true

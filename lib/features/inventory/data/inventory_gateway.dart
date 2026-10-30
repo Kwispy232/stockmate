@@ -46,13 +46,21 @@ class DemoGateway implements InventoryGateway {
 }
 
 class SupabaseInventoryGateway implements InventoryGateway {
-  const SupabaseInventoryGateway(this.client);
+  const SupabaseInventoryGateway(this.client, this.userId);
   final SupabaseClient client;
+  final String userId;
+
+  void _checkSession() {
+    if (client.auth.currentUser?.id != userId) throw InventoryIssue.accessDenied;
+  }
 
   @override
   Future<Catalog> fetchCatalog() async {
+    _checkSession();
     final branches = await client.from('branches').select().order('name');
+    _checkSession();
     final products = await client.from('catalog_items').select().order('name');
+    _checkSession();
     return Catalog(
       branches.map((row) => Branch(id: row['id'], name: row['name'])).toList(),
       products
@@ -73,6 +81,7 @@ class SupabaseInventoryGateway implements InventoryGateway {
 
   @override
   Future<void> submit(Inventory inventory) async {
+    _checkSession();
     try {
       await client.rpc(
         'submit_inventory',
@@ -99,10 +108,13 @@ class SupabaseInventoryGateway implements InventoryGateway {
 
   @override
   Future<List<Inventory>> fetchSubmitted() async {
+    _checkSession();
     final rows = await client
         .from('inventories')
         .select('*, branches(name), inventory_lines(*)')
-        .order('created_at', ascending: false);
+        .order('created_at', ascending: false)
+        .limit(100);
+    _checkSession();
     return [
       for (final row in rows)
         Inventory(
