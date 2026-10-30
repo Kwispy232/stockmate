@@ -33,6 +33,7 @@ class FakeGateway implements InventoryGateway {
   bool loseResponse = false;
   int attempts = 0;
   final submitted = <String, Inventory>{};
+  final rejectedIds = <String>{};
 
   @override
   Future<Catalog> fetchCatalog() async {
@@ -43,6 +44,7 @@ class FakeGateway implements InventoryGateway {
   @override
   Future<void> submit(Inventory inventory) async {
     attempts++;
+    if (rejectedIds.contains(inventory.id)) throw InventoryIssue.accessDenied;
     if (offline) throw const SocketException('offline');
     submitted.putIfAbsent(
       inventory.id,

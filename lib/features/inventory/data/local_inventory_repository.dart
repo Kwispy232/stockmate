@@ -128,6 +128,7 @@ class LocalInventoryRepository implements InventoryRepository {
 
   Future<void> _drain() async {
     final pending = await db.select(db.pendingSubmissions).get();
+    (Object, StackTrace)? failure;
     for (final item in pending) {
       final inventory = await _get(item.inventoryId);
       try {
@@ -138,12 +139,13 @@ class LocalInventoryRepository implements InventoryRepository {
             db.pendingSubmissions,
           )..where((row) => row.inventoryId.equals(inventory.id))).go();
         });
-      } catch (error) {
+      } catch (error, stack) {
         final issue = error is InventoryIssue ? error : InventoryIssue.network;
         await _save(inventory.copyWith(syncError: issue.name));
-        rethrow;
+        failure ??= (error, stack);
       }
     }
+    if (failure != null) Error.throwWithStackTrace(failure.$1, failure.$2);
     final remote = await gateway.fetchSubmitted().timeout(const Duration(seconds: 15));
     await db.transaction(() async {
       for (final inventory in remote) {

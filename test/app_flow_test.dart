@@ -129,4 +129,21 @@ void main() {
       expect(tester.takeException(), isNull);
     });
   });
+
+  testWidgets('leaving the demo redirects safely and retains the draft on return', (tester) async {
+    await withApp(tester, (app) async {
+      await tapVisible(tester, find.byKey(const Key('newInventory')));
+      await tester.enterText(find.byKey(const Key('inventoryName')), 'Before sign out');
+      await tapVisible(tester, find.byKey(const Key('createInventory')));
+      app.container.read(routerProvider).go('/settings');
+      await tester.pumpAndSettle();
+      await tapVisible(tester, find.byKey(const Key('leaveWorkspace')));
+      await tester.tap(find.text('Leave demo').last);
+      await tester.pumpAndSettle();
+      expect(find.text('Every shelf.\nAccounted for.'), findsOneWidget);
+      await tapVisible(tester, find.byKey(const Key('enterDemo')));
+      await tapVisible(tester, find.text('Before sign out'));
+      expect(tester.takeException(), isNull);
+    }, workspace: const Workspace.demo());
+  });
 }

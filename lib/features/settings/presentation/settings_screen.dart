@@ -12,7 +12,8 @@ class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final workspace = ref.watch(sessionProvider)!;
+    final workspace = ref.watch(sessionProvider);
+    if (workspace == null) return const SizedBox.shrink();
     final preferences = ref.watch(preferencesProvider);
     final actions = ref.watch(inventoryActionsProvider);
     return AppPage(

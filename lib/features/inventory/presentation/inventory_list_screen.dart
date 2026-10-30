@@ -31,14 +31,17 @@ class _InventoryListScreenState extends ConsumerState<InventoryListScreen>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) ref.read(syncProvider.notifier).synchronize();
+    if (state == AppLifecycleState.resumed && ref.read(sessionProvider) != null) {
+      ref.read(syncProvider.notifier).synchronize();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final workspace = ref.watch(sessionProvider);
+    if (workspace == null) return const SizedBox.shrink();
     final inventories = ref.watch(inventoriesProvider);
     final synchronization = ref.watch(syncProvider);
-    final workspace = ref.watch(sessionProvider)!;
     final online = !workspace.isDemo || ref.watch(demoConnectionProvider);
     return AppPage(
       title: context.l.inventories,

@@ -105,4 +105,21 @@ void main() {
     await repository.delete(inventory.id);
     expect(await repository.watchAll().first, isEmpty);
   });
+
+  test('a rejected submission does not block other queued inventories', () async {
+    final rejected = await repository.create(branch, 'Revoked access');
+    final valid = await repository.create(branch, 'Valid count');
+    await repository.fillRemaining(rejected.id);
+    await repository.fillRemaining(valid.id);
+    gateway.offline = true;
+    await expectLater(repository.submit(rejected.id), throwsA(isA<SocketException>()));
+    await expectLater(repository.submit(valid.id), throwsA(isA<SocketException>()));
+    gateway.offline = false;
+    gateway.rejectedIds.add(rejected.id);
+    await expectLater(repository.synchronize(), throwsA(InventoryIssue.accessDenied));
+    final rows = await repository.watchAll().first;
+    expect(rows.singleWhere((row) => row.id == valid.id).status, InventoryStatus.submitted);
+    expect(rows.singleWhere((row) => row.id == rejected.id).status, InventoryStatus.queued);
+    expect((await db.select(db.pendingSubmissions).get()).single.inventoryId, rejected.id);
+  });
 }

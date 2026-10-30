@@ -11,14 +11,16 @@ import '../domain/inventory.dart';
 import '../domain/inventory_repository.dart';
 
 final databaseProvider = Provider.autoDispose<AppDatabase>((ref) {
-  final workspace = ref.watch(sessionProvider)!;
+  final workspace = ref.watch(sessionProvider);
+  if (workspace == null) throw InventoryIssue.accessDenied;
   final db = AppDatabase(workspace.id);
   ref.onDispose(() => unawaited(db.close()));
   return db;
 });
 
 final repositoryProvider = Provider.autoDispose<InventoryRepository>((ref) {
-  final workspace = ref.watch(sessionProvider)!;
+  final workspace = ref.watch(sessionProvider);
+  if (workspace == null) throw InventoryIssue.accessDenied;
   return LocalInventoryRepository(
     ref.watch(databaseProvider),
     workspace.isDemo
@@ -47,7 +49,7 @@ class SyncController extends AsyncNotifier<void> {
   }
 
   Future<void> synchronize() async {
-    if (state.isLoading) return;
+    if (!ref.mounted || ref.read(sessionProvider) == null || state.isLoading) return;
     state = const AsyncLoading();
     final result = await AsyncValue.guard(ref.read(repositoryProvider).synchronize);
     if (ref.mounted) state = result;
