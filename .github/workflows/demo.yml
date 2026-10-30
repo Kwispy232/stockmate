@@ -70,6 +70,8 @@ jobs:
           java-version: '21'
       - if: matrix.platform == 'android'
         uses: android-actions/setup-android@v3
+        with:
+          packages: 'platform-tools platforms;android-36 build-tools;36.0.0'
       - uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
