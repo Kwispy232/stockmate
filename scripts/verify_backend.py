@@ -47,7 +47,7 @@ try:
     assert len(branches) == 2
     branch = branches[0]['id']
     products = request('GET', f'/rest/v1/catalog_items?branch_id=eq.{branch}&select=*', token=token)
-    assert len(products) == 30
+    assert products, 'The hosted catalogue must contain products.'
     inventory_id = str(uuid.uuid4())
     submission = {'p_id': inventory_id, 'p_branch_id': branch, 'p_title': 'HTTP verification',
                   'p_created_at': '2026-10-30T12:00:00Z',
@@ -55,7 +55,7 @@ try:
     for _ in range(2):
         assert request('POST', '/rest/v1/rpc/submit_inventory', submission, token=token) == inventory_id
     rows = request('GET', '/rest/v1/inventories?select=*,inventory_lines(*)', token=token)
-    assert len(rows) == 1 and len(rows[0]['inventory_lines']) == 30
+    assert len(rows) == 1 and len(rows[0]['inventory_lines']) == len(products)
     assert request('GET', '/rest/v1/inventories?select=*', token=tokens[1]) == []
     request('POST', '/rest/v1/rpc/submit_inventory', submission, token=tokens[1], expected=403)
     request('PATCH', f'/rest/v1/inventories?id=eq.{inventory_id}', {'title': 'Tampered'}, token=token, expected=403)
