@@ -21,33 +21,18 @@
     </Frame>
   </Frame>
   <Frame name="Content / scroll" x={24} y={104} flex="col" w={364}>
-    <Frame name="Space / 24" w={1} h={24} />
-    <Frame name="StockMate / Original SVG" w={80} h={80}>
-      <Frame name="StockMate / Frame" w={80} h={80}>
-        <Vector name="path" w={80} h={80} bg="#147D73" constraints={{ horizontal: "scale", vertical: "scale" }} />
-        <Vector name="path" w={80} h={80} stroke="#FFFFFF" strokeWidth={3.3333333333333335} strokeAlign="center" strokeJoin="round" constraints={{ horizontal: "scale", vertical: "scale" }} />
-        <Vector name="path" w={80} h={80} stroke="#FFFFFF" strokeWidth={3.3333333333333335} strokeAlign="center" strokeJoin="round" constraints={{ horizontal: "scale", vertical: "scale" }} />
-        <Vector name="path" w={80} h={80} bg="#DFFFAB" constraints={{ horizontal: "scale", vertical: "scale" }} />
-        <Vector name="path" w={80} h={80} stroke="#11564F" strokeWidth={3.3333333333333335} strokeAlign="center" strokeCap="round" strokeJoin="round" constraints={{ horizontal: "scale", vertical: "scale" }} />
-      </Frame>
-    </Frame>
-    <Frame name="Space / 32" w={1} h={32} />
-    <Text name="Text / Každý kus. Pod kontrolou." w="fill" color="#161D1C" size={36} font="Roboto" weight={800} lineHeight={44} letterSpacing={-1.8} bind={{ "fills/0/color": "1074826698:36" }}>{"Každý kus.\nPod kontrolou."}</Text>
-    <Frame name="Space / 18" w={1} h={18} />
-    <Text name="Text / Naskenuj, spočítaj a pokračuj. Inventúra zostane" w="fill" color="#3F4947" size={16} font="Roboto" weight="medium" lineHeight={24} bind={{ "fills/0/color": "1074826698:37" }}>Naskenuj, spočítaj a pokračuj. Inventúra zostane v bezpečí aj bez pripojenia.</Text>
-    <Frame name="Space / 30" w={1} h={30} />
-    <Frame name="Welcome / Feature panel" flex="col" w="fill" p={24} bg="#123E38" rounded={24}>
-      <Frame name="Icon / scan" w={36} h={36}>
-        <Frame name="Icon / Frame" w={36} h={36}>
-          <Vector name="path" w={36} h={36} stroke="#DFFFAB" strokeWidth={2.55} strokeAlign="center" strokeCap="round" strokeJoin="round" constraints={{ horizontal: "scale", vertical: "scale" }} />
+    <Frame name="Welcome / Centered brand" flex="row" h={543} w="fill" justify="center" items="center">
+      <Frame name="StockMate / Original SVG" w={80} h={80}>
+        <Frame name="StockMate / Frame" w={80} h={80}>
+          <Vector name="path" w={80} h={80} bg="#147D73" constraints={{ horizontal: "scale", vertical: "scale" }} />
+          <Vector name="path" w={80} h={80} stroke="#FFFFFF" strokeWidth={3.3333333333333335} strokeAlign="center" strokeJoin="round" constraints={{ horizontal: "scale", vertical: "scale" }} />
+          <Vector name="path" w={80} h={80} stroke="#FFFFFF" strokeWidth={3.3333333333333335} strokeAlign="center" strokeJoin="round" constraints={{ horizontal: "scale", vertical: "scale" }} />
+          <Vector name="path" w={80} h={80} bg="#DFFFAB" constraints={{ horizontal: "scale", vertical: "scale" }} />
+          <Vector name="path" w={80} h={80} stroke="#11564F" strokeWidth={3.3333333333333335} strokeAlign="center" strokeCap="round" strokeJoin="round" constraints={{ horizontal: "scale", vertical: "scale" }} />
         </Frame>
       </Frame>
-      <Frame name="Space / 28" w={1} h={28} />
-      <Text name="Text / Trochu poriadku. Veľa prehľadu." w="fill" color="#FFFFFF" size={24} font="Roboto" weight={600}>Trochu poriadku. Veľa prehľadu.</Text>
-      <Frame name="Space / 12" w={1} h={12} />
-      <Text name="Text / Ukážkové údaje zostávajú v zariadení. Účet netre" w="fill" color="#B8CCCA" font="Roboto" lineHeight={20}>Ukážkové údaje zostávajú v zariadení. Účet netreba.</Text>
     </Frame>
-    <Frame name="Space / 30" w={1} h={30} />
+    <Frame name="Space / 24" w={1} h={24} />
     <Frame name="ANDROID / Button / Primary / light" flex="row" h={52} w="fill" justify="center" items="center" bg="#147D73" rounded={14} bind={{ "fills/0/color": "1074826698:31" }}>
       <Text name="Text / Vyskúšať demo" color="#FFFFFF" font="Roboto" weight="medium" bind={{ "fills/0/color": "1074826698:32" }}>Vyskúšať demo</Text>
     </Frame>

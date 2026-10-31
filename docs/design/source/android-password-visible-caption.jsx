@@ -1,0 +1,1 @@
+<Text name="Annotation / ANDROID · HESLO VIDITEĽNÉ" x={520} y={3312} color="#DDE4E1" size={16} weight={600}>ANDROID · HESLO VIDITEĽNÉ</Text>

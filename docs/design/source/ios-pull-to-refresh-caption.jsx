@@ -1,0 +1,1 @@
+<Text name="Annotation / IOS · POTIAHNUTIE NADOL / OBNOVOVANIE" x={2600} y={112} color="#DDE4E1" size={16} weight={600}>IOS · POTIAHNUTIE NADOL / OBNOVOVANIE</Text>

@@ -62,4 +62,9 @@
   </Frame>
   <Text name="Text / A / VSTUP A PRACOVNÝ PRIESTOR" x={50} y={35} color="#161D1C" size={30} weight="bold">A / VSTUP A PRACOVNÝ PRIESTOR</Text>
   <Text name="Text / Demo aj live používajú rovnaký pracovný tok. Úlo" x={50} y={85} w={1800} color="#3F4947" size={17}>Demo aj live používajú rovnaký pracovný tok. Úložiská sú oddelené podľa priestoru.</Text>
+  <Frame name="Flow notes / Password and refresh" x={1630} y={145} flex="col" w={340} gap={20}>
+    <Text name="Text / Správanie ovládania" w="fill" color="#161D1C" size={20} weight="bold">Správanie ovládania</Text>
+    <Text name="Text / Prepínač hesla" w="fill" color="#3F4947" size={16}>Oko pri hesle prepína skryté a viditeľné znaky. Hodnota hesla zostáva zachovaná.</Text>
+    <Text name="Text / Potiahnutie na obnovenie" w="fill" color="#3F4947" size={16}>Potiahnutie zoznamu nadol obnoví údaje. Počas požiadavky sa zobrazí indikátor; pri chybe zostávajú údaje aj koncepty zachované.</Text>
+  </Frame>
 </Frame>

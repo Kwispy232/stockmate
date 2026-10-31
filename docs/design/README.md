@@ -1,6 +1,6 @@
 # StockMate design handoff
 
-Open `StockMate.fig` in OpenPencil. The active document is an editable reconstruction of the current v0.1.0 app, rather than a screenshot collection.
+Open `StockMate.fig` in OpenPencil. The document is an editable design based on the v0.1.0 app, including changes from design review.
 
 ## Pages
 
@@ -9,7 +9,7 @@ Open `StockMate.fig` in OpenPencil. The active document is an editable reconstru
 | 00 · Sprievodca | Navigation and editing guide |
 | 01 · iOS | 13 viewport compositions and 3 full scroll references, 420 × 912 baseline |
 | 02 · Android | Matching compositions, 412 × 924 baseline |
-| 03 · Stavy a dialógy | 10 supporting states and 8 platform-specific confirmation dialogs |
+| 03 · Stavy a dialógy | 14 supporting states and 8 platform-specific confirmation dialogs |
 | 04 · Navigačné flowy | Workspace entry, counting/review, and offline submission maps |
 | 05 · Komponenty a témy | 8 linked button masters, 34 semantic color variables, controls and 4 dark-mode compositions |
 
@@ -18,6 +18,12 @@ Text, shapes, vector icons, cards, and layouts are editable. Button instances ex
 The diagrams are visual navigation maps, not a clickable prototype. System bars, keyboard and camera preview are editable schematic representations. iOS uses the available Helvetica Neue Regular, Medium and Bold faces instead of the app's system SF Pro. Android uses Roboto. The optional stock-administration workflow discussed in chat is outside this reconstruction.
 
 `source/*.jsx` contains inspected snapshots exported from the final editor document. The `.fig` file is the canonical editable source: JSX exports flatten component instances and do not reproduce the whole component-property graph. `tokens.json` is the editor's design-token export.
+
+## Reviewed design changes
+
+The welcome screen now contains a centered logo and the demo/sign-in actions. Authentication includes a password-visibility control and removes the explanatory account text. Inventory lists remove their introductory copy and refresh button, with pull-to-refresh states shown for both platforms. The count editor's backdrop and keyboard alignment are corrected. Full-content references, offline and dark variants, and interaction notes follow these changes.
+
+These changes are design specifications for the Flutter implementation. Password visibility and pull-to-refresh are illustrated as canvas states; the flow maps describe their behavior.
 
 ## Checks
 

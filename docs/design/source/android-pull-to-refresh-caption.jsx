@@ -1,0 +1,1 @@
+<Text name="Annotation / ANDROID · POTIAHNUTIE NADOL / OBNOVOVANIE" x={2600} y={1212} color="#DDE4E1" size={16} weight={600}>ANDROID · POTIAHNUTIE NADOL / OBNOVOVANIE</Text>

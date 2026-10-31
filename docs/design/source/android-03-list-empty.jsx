@@ -38,16 +38,7 @@
         </Frame>
       </Frame>
       <Text name="Text / Lokálne demo" grow={1} color="#161D1C" font="Roboto" weight="medium" bind={{ "fills/0/color": "1074826698:36" }}>Lokálne demo</Text>
-      <Frame name="Icon / sync" w={24} h={24}>
-        <Frame name="Icon / Frame" w={24} h={24}>
-          <Vector name="path" w={24} h={24} stroke="#147D73" strokeWidth={1.7} strokeAlign="center" strokeCap="round" strokeJoin="round" constraints={{ horizontal: "scale", vertical: "scale" }} />
-        </Frame>
-      </Frame>
     </Frame>
-    <Frame name="Space / 24" w={1} h={24} />
-    <Text name="Text / Zásoby pod kontrolou" w="fill" color="#161D1C" size={28} font="Roboto" weight="bold" letterSpacing={-0.7} bind={{ "fills/0/color": "1074826698:36" }}>Zásoby pod kontrolou</Text>
-    <Frame name="Space / 8" w={1} h={8} />
-    <Text name="Text / Malé počty. Jasné rozhodnutia." w="fill" color="#3F4947" size={16} font="Roboto" bind={{ "fills/0/color": "1074826698:37" }}>Malé počty. Jasné rozhodnutia.</Text>
     <Frame name="Space / 24" w={1} h={24} />
     <Frame name="Layout / 0" flex="row" w="fill" gap={12} items="center">
       <Frame name="Metric / Active" flex="col" grow={1} p={20} bg="#FFFFFF" stroke="#BEC9C6" strokeWidth={0.6} rounded={20} bind={{

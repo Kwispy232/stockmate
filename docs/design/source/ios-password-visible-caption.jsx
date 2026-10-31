@@ -1,0 +1,1 @@
+<Text name="Annotation / IOS · HESLO VIDITEĽNÉ" y={3312} color="#DDE4E1" size={16} weight={600}>IOS · HESLO VIDITEĽNÉ</Text>

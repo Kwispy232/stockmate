@@ -53,11 +53,18 @@
     <Frame name="Layout / Heslo" flex="col" w="fill">
       <Text name="Text / Heslo" w="fill" color="#161D1C" font="Roboto" weight="medium" bind={{ "fills/0/color": "1074826698:36" }}>Heslo</Text>
       <Frame name="Space / 8" w={1} h={8} />
-      <Frame name="Field / Heslo" flex="row" h={54} w="fill" items="center" p={15} bg="#FFFFFF" stroke="#6F7977" rounded={12} bind={{
+      <Frame name="Field / Heslo" flex="row" h={54} w="fill" items="center" py={5} px={12} bg="#FFFFFF" stroke="#6F7977" rounded={12} bind={{
         "fills/0/color": "1074826698:40",
         "strokes/0/color": "1074826698:43"
       }}>
         <Text name="Text / Aspoň 6 znakov" grow={1} color="#3F4947" size={16} font="Roboto" bind={{ "fills/0/color": "1074826698:37" }}>Aspoň 6 znakov</Text>
+        <Frame name="Password / Show password button" flex="row" w={44} h={44} justify="center" items="center">
+          <Frame name="Icon / Show password" w={24} h={24}>
+            <Frame name="custom" w={24} h={24}>
+              <Vector name="path" w={24} h={24} stroke="#147D73" strokeWidth={1.7} strokeAlign="center" strokeCap="round" strokeJoin="round" constraints={{ horizontal: "scale", vertical: "scale" }} />
+            </Frame>
+          </Frame>
+        </Frame>
       </Frame>
     </Frame>
     <Frame name="Space / 24" w={1} h={24} />
@@ -68,8 +75,6 @@
     <Frame name="ANDROID / Button / Secondary / light" flex="row" h={52} w="fill" justify="center" items="center" bg="#DDE4E1" rounded={14} bind={{ "fills/0/color": "1074826698:38" }}>
       <Text name="Text / Vytvoriť účet" color="#161D1C" font="Roboto" weight="medium" bind={{ "fills/0/color": "1074826698:36" }}>Vytvoriť účet</Text>
     </Frame>
-    <Frame name="Space / 24" w={1} h={24} />
-    <Text name="Text / Účet sprístupní dve ukážkové predajne. Tvoje odo" w="fill" color="#3F4947" font="Roboto" bind={{ "fills/0/color": "1074826698:37" }}>Účet sprístupní dve ukážkové predajne. Tvoje odoslané inventúry sú súkromné.</Text>
   </Frame>
   <Frame name="02 · Prihlásenie a registrácia / Frame" y={896} w={412} h={28}>
     <Frame name="System / Gesture navigation" w={412} h={28}>

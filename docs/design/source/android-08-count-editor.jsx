@@ -57,7 +57,7 @@
     </Frame>
   </Frame>
   <Frame name="Modal / Scrim" w={412} h={924} bg="#000000" opacity={0.35} />
-  <Frame name="Count editor / Bottom sheet" y={443} flex="col" w={412} p={24} bg="#F4F6F3" roundedTL={24} roundedTR={24} bind={{ "fills/0/color": "1074826698:35" }}>
+  <Frame name="Count editor / Bottom sheet" y={446} flex="col" w={412} p={24} bg="#F4F6F3" roundedTL={24} roundedTR={24} bind={{ "fills/0/color": "1074826698:35" }}>
     <Frame name="Layout / Coffee beans 250 g" flex="row" w="fill" gap={10} items="center">
       <Text name="Text / Coffee beans 250 g" grow={1} color="#161D1C" size={22} font="Roboto" weight="medium" bind={{ "fills/0/color": "1074826698:36" }}>Coffee beans 250 g</Text>
       <Frame name="Icon / close" w={24} h={24}>
