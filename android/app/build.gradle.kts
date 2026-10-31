@@ -3,6 +3,8 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
+val distributionKeystore = System.getenv("ANDROID_KEYSTORE_PATH")
+
 android {
     namespace = "dev.sebastianmraz.stockmate"
     compileSdk = flutter.compileSdkVersion
@@ -21,9 +23,20 @@ android {
         versionName = flutter.versionName
     }
 
+    signingConfigs {
+        if (distributionKeystore != null) {
+            create("distribution") {
+                storeFile = file(distributionKeystore)
+                storePassword = System.getenv("ANDROID_KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("ANDROID_KEY_ALIAS")
+                keyPassword = System.getenv("ANDROID_KEY_PASSWORD")
+            }
+        }
+    }
+
     buildTypes {
         release {
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.findByName("distribution") ?: signingConfigs.getByName("debug")
         }
     }
 }

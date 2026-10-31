@@ -4,7 +4,11 @@ require 'json'
 require 'shellwords'
 require 'yaml'
 
-def record_artifact(platform, filename)
+def artifact_path(filename)
+  File.expand_path("../build/artifacts/#{filename}", __dir__)
+end
+
+def record_artifact(platform, filename, manifest: "#{platform}-build.json")
   root = File.expand_path('..', __dir__)
   artifact = File.join(root, 'build', 'artifacts', filename)
   version = YAML.load_file(File.join(root, 'pubspec.yaml'))['version'].split('+').first
@@ -17,7 +21,30 @@ def record_artifact(platform, filename)
     artifact: filename,
     sha256: Digest::SHA256.file(artifact).hexdigest
   }
-  File.write(File.join(root, 'build', 'artifacts', "#{platform}-build.json"), JSON.pretty_generate(metadata) + "\n")
+  File.write(artifact_path(manifest), JSON.pretty_generate(metadata) + "\n")
+end
+
+def require_settings(*names)
+  missing = names.select { |name| ENV[name].to_s.strip.empty? }
+  UI.user_error!("Missing distribution settings: #{missing.join(', ')}") unless missing.empty?
+end
+
+def publish_to_firebase(platform, filename)
+  require_settings('FIREBASE_APP_ID', 'FIREBASE_TESTER_GROUPS')
+  UI.user_error!("Build #{filename} before distributing it") unless File.file?(artifact_path(filename))
+  release = firebase_app_distribution(
+    app: ENV.fetch('FIREBASE_APP_ID'),
+    groups: ENV.fetch('FIREBASE_TESTER_GROUPS'),
+    android_artifact_type: platform == 'android' ? 'APK' : nil,
+    android_artifact_path: platform == 'android' ? artifact_path(filename) : nil,
+    ipa_path: platform == 'ios' ? artifact_path(filename) : nil,
+    release_notes: "StockMate #{platform} demo\nCommit: #{ENV['GITHUB_SHA'] || `git rev-parse HEAD`.strip}\nBuild: #{ENV.fetch('BUILD_NUMBER', '1')}"
+  )
+  if ENV['GITHUB_STEP_SUMMARY']
+    File.open(ENV.fetch('GITHUB_STEP_SUMMARY'), 'a') do |summary|
+      summary.puts("### #{platform.capitalize} Firebase demo\n\n[Open tester release](#{release[:testingUri] || release['testingUri']})\n")
+    end
+  end
 end
 
 platform :android do
@@ -28,6 +55,21 @@ platform :android do
     FileUtils.mkdir_p('../build/artifacts')
     FileUtils.cp('../build/app/outputs/flutter-apk/app-release.apk', '../build/artifacts/StockMate-android.apk')
     record_artifact('android', 'StockMate-android.apk')
+  end
+
+  desc 'Build a consistently signed universal APK for Firebase'
+  lane :firebase_build do
+    require_settings('ANDROID_KEYSTORE_PATH', 'ANDROID_KEYSTORE_PASSWORD',
+                     'ANDROID_KEY_ALIAS', 'ANDROID_KEY_PASSWORD')
+    sh('flutter', 'build', 'apk', '--release', '--build-number', ENV.fetch('BUILD_NUMBER', '1'))
+    FileUtils.mkdir_p(File.dirname(artifact_path('StockMate-android.apk')))
+    FileUtils.cp('../build/app/outputs/flutter-apk/app-release.apk', artifact_path('StockMate-android.apk'))
+    record_artifact('android', 'StockMate-android.apk')
+  end
+
+  desc 'Upload the signed Android build to Firebase testers'
+  lane :distribute do
+    publish_to_firebase('android', 'StockMate-android.apk')
   end
 end
 
@@ -40,5 +82,33 @@ platform :ios do
     sh('ditto', '-c', '-k', '--sequesterRsrc', '--keepParent',
        '../build/ios/iphonesimulator/Runner.app', '../build/artifacts/StockMate-ios-simulator.zip')
     record_artifact('ios', 'StockMate-ios-simulator.zip')
+  end
+
+  desc 'Archive an Ad Hoc iPhone IPA for Firebase'
+  lane :firebase_build do
+    require_settings('IOS_TEAM_ID', 'IOS_PROFILE_NAME')
+    sh('flutter', 'build', 'ios', '--release', '--no-codesign', '--config-only',
+       '--build-number', ENV.fetch('BUILD_NUMBER', '1'))
+    build_app(
+      workspace: 'ios/Runner.xcworkspace',
+      scheme: 'Runner',
+      configuration: 'Release',
+      output_directory: File.dirname(artifact_path('StockMate-ios.ipa')),
+      output_name: 'StockMate-ios.ipa',
+      archive_path: 'build/ios/archive/Runner.xcarchive',
+      export_method: 'ad-hoc',
+      export_options: {
+        method: 'release-testing', signingStyle: 'manual', teamID: ENV.fetch('IOS_TEAM_ID'),
+        provisioningProfiles: { 'dev.sebastianmraz.stockmate' => ENV.fetch('IOS_PROFILE_NAME') }
+      },
+      xcargs: "DEVELOPMENT_TEAM=#{ENV.fetch('IOS_TEAM_ID').shellescape} CODE_SIGN_STYLE=Manual CODE_SIGN_IDENTITY='Apple Distribution' PROVISIONING_PROFILE_SPECIFIER=#{ENV.fetch('IOS_PROFILE_NAME').shellescape}",
+      buildlog_path: 'build/ios/logs'
+    )
+    record_artifact('ios', 'StockMate-ios.ipa', manifest: 'ios-device-build.json')
+  end
+
+  desc 'Upload the signed iPhone build to Firebase testers'
+  lane :distribute do
+    publish_to_firebase('ios', 'StockMate-ios.ipa')
   end
 end

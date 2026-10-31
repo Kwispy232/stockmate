@@ -50,7 +50,7 @@ The live room needs at least one participant with the document online. The downl
 | UI | Cupertino controls on iOS, Material 3 on Android, light/dark themes |
 | Languages | Slovak and English ARB resources, plurals and locale-aware dates |
 | Assets and camera | flutter_svg and mobile_scanner with manual barcode fallback |
-| Delivery | GitHub Actions, fastlane, GitHub demo releases |
+| Delivery | GitHub Actions, fastlane, GitHub releases, Firebase App Distribution |
 
 ```mermaid
 flowchart LR
@@ -93,6 +93,6 @@ bundle exec fastlane ios demo
 
 Android produces an ARM64 release APK with development signing. iOS produces an unsigned debug simulator archive containing both simulator architectures. Outputs and SHA-256/source manifests are under `build/artifacts/`.
 
-PRs run quality and isolated backend checks. Pushes to `develop` also build downloadable Actions artifacts. A push/merge to `main` publishes a GitHub prerelease after the checks, native iOS integration test, and both builds succeed. No store accounts, store credentials, TestFlight, or Google Play configuration are involved.
+PRs run quality and isolated backend checks. Pushes to `develop` also build downloadable Actions artifacts. A push/merge to `main` publishes a GitHub prerelease after the checks, native iOS integration test, and both builds succeed. Firebase distribution additionally builds a signed universal Android APK and an Ad Hoc iPhone IPA after verification. It runs on pushes when enabled or through the manual workflow option. See [Firebase setup and reviewer installation](docs/firebase-distribution.md). No TestFlight or Google Play setup is involved.
 
 Generated Freezed/Drift/localization files and lockfiles are committed. `scripts/render_icon.swift` regenerates the original app icons on macOS; `scripts/generate_seed.py` keeps the local and hosted sample catalogues aligned.

@@ -6,6 +6,11 @@ on:
   push:
     branches: [develop, main]
   workflow_dispatch:
+    inputs:
+      distribute:
+        description: Upload signed Android and iPhone builds to Firebase testers
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -108,9 +113,110 @@ jobs:
           path: build/artifacts/
           if-no-files-found: error
 
+  distribution_config:
+    if: github.event_name != 'pull_request' && (inputs.distribute || (vars.FIREBASE_DISTRIBUTION_ENABLED == 'true' && github.event_name == 'push'))
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 scripts/check_distribution.py
+        env:
+          FIREBASE_WORKLOAD_IDENTITY_PROVIDER: ${{ vars.FIREBASE_WORKLOAD_IDENTITY_PROVIDER }}
+          FIREBASE_SERVICE_ACCOUNT: ${{ vars.FIREBASE_SERVICE_ACCOUNT }}
+          FIREBASE_ANDROID_APP_ID: ${{ vars.FIREBASE_ANDROID_APP_ID }}
+          FIREBASE_IOS_APP_ID: ${{ vars.FIREBASE_IOS_APP_ID }}
+          FIREBASE_TESTER_GROUPS: ${{ vars.FIREBASE_TESTER_GROUPS }}
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          IOS_CERTIFICATE_BASE64: ${{ secrets.IOS_CERTIFICATE_BASE64 }}
+          IOS_CERTIFICATE_PASSWORD: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
+          IOS_PROFILE_BASE64: ${{ secrets.IOS_PROFILE_BASE64 }}
+          IOS_TEAM_ID: ${{ vars.IOS_TEAM_ID }}
+
+  distribute:
+    needs: [build, distribution_config]
+    if: github.event_name != 'pull_request' && (inputs.distribute || (vars.FIREBASE_DISTRIBUTION_ENABLED == 'true' && github.event_name == 'push'))
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: android
+            os: ubuntu-24.04
+          - platform: ios
+            os: macos-latest
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 40
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      BUILD_NUMBER: ${{ github.run_number }}
+      FIREBASE_APP_ID: ${{ matrix.platform == 'ios' && vars.FIREBASE_IOS_APP_ID || vars.FIREBASE_ANDROID_APP_ID }}
+      FIREBASE_TESTER_GROUPS: ${{ vars.FIREBASE_TESTER_GROUPS }}
+      IOS_TEAM_ID: ${{ vars.IOS_TEAM_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/flutter
+      - if: matrix.platform == 'android'
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - if: matrix.platform == 'android'
+        uses: android-actions/setup-android@v3
+        with:
+          packages: 'platform-tools platforms;android-36 build-tools;36.0.0'
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Prepare Android signing
+        if: matrix.platform == 'android'
+        run: python3 scripts/ci_signing.py prepare android
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+      - name: Build signed Android APK
+        if: matrix.platform == 'android'
+        run: bundle exec fastlane android firebase_build
+        env:
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+      - name: Prepare iOS signing
+        if: matrix.platform == 'ios'
+        run: python3 scripts/ci_signing.py prepare ios
+        env:
+          IOS_CERTIFICATE_BASE64: ${{ secrets.IOS_CERTIFICATE_BASE64 }}
+          IOS_CERTIFICATE_PASSWORD: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
+          IOS_PROFILE_BASE64: ${{ secrets.IOS_PROFILE_BASE64 }}
+      - name: Build signed iPhone IPA
+        if: matrix.platform == 'ios'
+        run: bundle exec fastlane ios firebase_build
+      - name: Preserve signed demo builds
+        uses: actions/upload-artifact@v4
+        with:
+          name: firebase-${{ matrix.platform }}
+          path: build/artifacts/
+          if-no-files-found: error
+          retention-days: 14
+      - name: Authenticate to Firebase with GitHub OIDC
+        uses: google-github-actions/auth@v3
+        with:
+          workload_identity_provider: ${{ vars.FIREBASE_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.FIREBASE_SERVICE_ACCOUNT }}
+      - name: Distribute to Firebase testers
+        run: bundle exec fastlane ${{ matrix.platform }} distribute
+      - name: Remove temporary signing material
+        if: always()
+        run: python3 scripts/ci_signing.py cleanup '${{ matrix.platform }}'
+
   release:
-    needs: build
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [build, distribution_config, distribute]
+    if: >-
+      always() && github.event_name == 'push' && github.ref == 'refs/heads/main' &&
+      needs.build.result == 'success' &&
+      (needs.distribution_config.result == 'success' || needs.distribution_config.result == 'skipped') &&
+      (needs.distribute.result == 'success' || needs.distribute.result == 'skipped')
     runs-on: ubuntu-latest
     permissions:
       contents: write

@@ -12,4 +12,4 @@
 - Add focused tests with the behavior they protect. Cover persistence, retry/idempotency, validation, and meaningful UI flows; avoid tests that mirror getters or generated code.
 - Keep local demo data isolated from authenticated backend data. Enforce backend access with RLS, not UI checks alone.
 - Never commit database passwords, management tokens, service-role keys, or signing credentials.
-- Distribution is through GitHub artifacts/releases. Do not configure or publish to mobile stores.
+- Distribution is through GitHub artifacts/releases and Firebase App Distribution. Do not configure or publish to mobile stores.

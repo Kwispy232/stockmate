@@ -21,6 +21,9 @@ config/*.json
 *.p8
 *.p12
 *.mobileprovision
+*.ipa
+*.xcarchive/
+gha-creds-*.json
 android/key.properties
 android/local.properties
 
