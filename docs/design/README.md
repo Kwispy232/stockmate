@@ -23,7 +23,13 @@ The diagrams are visual navigation maps, not a clickable prototype. System bars,
 
 The welcome screen now contains a centered logo and the demo/sign-in actions. Authentication includes a password-visibility control and removes the explanatory account text. Inventory lists remove their introductory copy and refresh button, with pull-to-refresh states shown for both platforms. The count editor's backdrop and keyboard alignment are corrected. Full-content references, offline and dark variants, and interaction notes follow these changes.
 
-These changes are design specifications for the Flutter implementation. Password visibility and pull-to-refresh are illustrated as canvas states; the flow maps describe their behavior.
+The Flutter app implements the simplified welcome screen, password visibility, and native pull-to-refresh on both platforms. The canvas states and flow notes describe the corresponding interactions.
+
+## Sharing
+
+[Open the live OpenPencil room](https://app.openpencil.dev/share/1rw1hpysg2m5nm7tsg3onc2oznc57tcz) or [download the editable file](https://github.com/Kwispy232/stockmate/raw/refs/heads/codex/design-handoff/docs/design/StockMate.fig).
+
+The live room was verified from a second browser. Anyone with its link can join and edit, while at least one participant with a copy is online. The download works independently of the room. Browser clients may substitute the local Helvetica Neue faces used by iOS frames; the desktop file was checked with those fonts installed. OpenPencil documents its peer-to-peer room behavior in the [collaboration guide](https://openpencil.dev/programmable/collaboration).
 
 ## Checks
 

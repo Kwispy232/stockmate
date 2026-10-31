@@ -54,6 +54,7 @@ class _InventoryListScreenState extends ConsumerState<InventoryListScreen>
       child: inventories.when(
         loading: () => const Center(child: CircularProgressIndicator.adaptive()),
         error: (error, _) => AppScroll(
+          onRefresh: () async => ref.invalidate(inventoriesProvider),
           children: [
             InfoBanner(text: errorMessage(context, error), warning: true),
             const SizedBox(height: 20),
@@ -61,6 +62,7 @@ class _InventoryListScreenState extends ConsumerState<InventoryListScreen>
           ],
         ),
         data: (items) => AppScroll(
+          onRefresh: ref.read(syncProvider.notifier).synchronize,
           children: [
             Row(
               children: [
@@ -72,33 +74,7 @@ class _InventoryListScreenState extends ConsumerState<InventoryListScreen>
                     style: context.text.labelLarge,
                   ),
                 ),
-                AppIconButton(
-                  label: context.l.sync,
-                  icon: Icons.sync_rounded,
-                  onPressed: synchronization.isLoading
-                      ? null
-                      : ref.read(syncProvider.notifier).synchronize,
-                ),
               ],
-            ),
-            const SizedBox(height: 24),
-            SizedBox(
-              width: double.infinity,
-              child: Text(
-                context.l.overview,
-                style: context.text.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: -.7,
-                ),
-              ),
-            ),
-            const SizedBox(height: 8),
-            SizedBox(
-              width: double.infinity,
-              child: Text(
-                context.l.overviewBody,
-                style: context.text.bodyLarge?.copyWith(color: context.colors.onSurfaceVariant),
-              ),
             ),
             const SizedBox(height: 24),
             Row(

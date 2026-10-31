@@ -9,6 +9,8 @@
   "createAccount": "Create account",
   "email": "Email",
   "password": "Password",
+  "showPassword": "Show password",
+  "hidePassword": "Hide password",
   "authHint": "Your account opens two sample stores. Your inventory submissions are private.",
   "checkEmail": "Check your email to confirm your account, then sign in.",
   "authError": "Couldn't sign in. Check your email and password, or try again later.",

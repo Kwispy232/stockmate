@@ -9,6 +9,8 @@
   "createAccount": "Vytvoriť účet",
   "email": "Email",
   "password": "Heslo",
+  "showPassword": "Zobraziť heslo",
+  "hidePassword": "Skryť heslo",
   "authHint": "Účet sprístupní dve ukážkové predajne. Tvoje odoslané inventúry sú súkromné.",
   "checkEmail": "Potvrď svoj účet cez email a potom sa prihlás.",
   "authError": "Prihlásenie sa nepodarilo. Skontroluj email a heslo alebo to skús neskôr.",

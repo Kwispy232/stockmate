@@ -27,11 +27,15 @@ For the hosted workspace, register with an email and password. This nonproductio
 2. Scan a product or search by name, SKU, or barcode. Record a whole-number quantity; zero means explicitly counted, while a blank remains uncounted.
 3. Mark genuinely missing products as zero, then review the differences.
 4. In the local demo, switch **Demo connection** off in Settings and submit. The immutable count stays in the durable sending queue.
-5. Restart the app, reconnect in Settings, and synchronize. The same submission ID is retried.
+5. Restart the app, reconnect in Settings, and pull down on the inventory list to synchronize. The same submission ID is retried.
 
 The local demo simulates transport failures. The authenticated workspace uses real HTTP requests and retains queued work after network failures. Synchronization runs while the inventory screen is active, on app resume, and on request; it is not an OS background service.
 
 ## Design
+
+[Open the shared OpenPencil room](https://app.openpencil.dev/share/1rw1hpysg2m5nm7tsg3onc2oznc57tcz) · [Download the editable design](https://github.com/Kwispy232/stockmate/raw/refs/heads/codex/design-handoff/docs/design/StockMate.fig)
+
+The live room needs at least one participant with the document online. The downloadable `.fig` is always available from this repository. See [the design handoff](docs/design/README.md) for editing notes.
 
 | Concern | Choice |
 | --- | --- |
@@ -71,7 +75,7 @@ flutter test --coverage
 flutter test integration_test/demo_flow_test.dart -d <simulator-or-device-id>
 ```
 
-Domain and file-backed repository tests cover validation, explicit zero counts, disk-write failure, concurrent edits, restart recovery, offline queueing, and lost-response retries. Widget tests exercise both platform styles, validation, submission, Slovak/dark preferences, unknown IDs, and a narrow screen with large text. The native integration test exercises offline submission and reconnection using the real local database and plugins.
+Domain and file-backed repository tests cover validation, explicit zero counts, disk-write failure, concurrent edits, restart recovery, offline queueing, and lost-response retries. Widget tests exercise both platform styles, password visibility without losing text or selection, pull-to-refresh on empty lists and after connection failures, validation, submission, Slovak/dark preferences, unknown IDs, and a narrow screen with large text. The native integration test exercises offline submission and reconnection using the real local database and plugins.
 
 Backend checks are documented in [supabase/README.md](supabase/README.md). Physical camera scanning needs a device; manual lookup is available on simulators and when permission is denied.
 

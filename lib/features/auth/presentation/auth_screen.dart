@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -14,6 +15,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   final email = TextEditingController();
   final password = TextEditingController();
   bool busy = false;
+  bool passwordVisible = false;
   String? error;
 
   @override
@@ -71,7 +73,19 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
             key: const Key('passwordField'),
             controller: password,
             label: context.l.password,
-            obscure: true,
+            keyboardType: TextInputType.visiblePassword,
+            obscure: !passwordVisible,
+            suffix: AppIconButton(
+              label: passwordVisible ? context.l.hidePassword : context.l.showPassword,
+              icon: context.isIOS
+                  ? passwordVisible
+                        ? CupertinoIcons.eye_slash
+                        : CupertinoIcons.eye
+                  : passwordVisible
+                  ? Icons.visibility_off_outlined
+                  : Icons.visibility_outlined,
+              onPressed: () => setState(() => passwordVisible = !passwordVisible),
+            ),
             autofillHints: const [AutofillHints.password],
             onSubmitted: busy ? null : (_) => authenticate(),
           ),
@@ -86,11 +100,6 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
             label: context.l.createAccount,
             secondary: true,
             onPressed: busy ? null : () => authenticate(register: true),
-          ),
-          const SizedBox(height: 24),
-          Text(
-            context.l.authHint,
-            style: context.text.bodyMedium?.copyWith(color: context.colors.onSurfaceVariant),
           ),
         ],
       ),

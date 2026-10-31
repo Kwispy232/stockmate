@@ -38,6 +38,12 @@ class AppLocalizationsSk extends AppLocalizations {
   String get password => 'Heslo';
 
   @override
+  String get showPassword => 'Zobraziť heslo';
+
+  @override
+  String get hidePassword => 'Skryť heslo';
+
+  @override
   String get authHint =>
       'Účet sprístupní dve ukážkové predajne. Tvoje odoslané inventúry sú súkromné.';
 

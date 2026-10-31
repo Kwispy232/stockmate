@@ -38,6 +38,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get password => 'Password';
 
   @override
+  String get showPassword => 'Show password';
+
+  @override
+  String get hidePassword => 'Hide password';
+
+  @override
   String get authHint =>
       'Your account opens two sample stores. Your inventory submissions are private.';
 

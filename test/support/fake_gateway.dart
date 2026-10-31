@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:stockmate/features/inventory/data/inventory_gateway.dart';
@@ -32,6 +33,8 @@ class FakeGateway implements InventoryGateway {
   bool offline = false;
   bool loseResponse = false;
   int attempts = 0;
+  int fetches = 0;
+  Completer<void>? fetchBarrier;
   final submitted = <String, Inventory>{};
   final rejectedIds = <String>{};
 
@@ -55,6 +58,8 @@ class FakeGateway implements InventoryGateway {
 
   @override
   Future<List<Inventory>> fetchSubmitted() async {
+    fetches++;
+    await fetchBarrier?.future;
     if (offline) throw const SocketException('offline');
     return submitted.values.toList();
   }

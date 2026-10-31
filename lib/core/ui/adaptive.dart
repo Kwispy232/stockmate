@@ -55,24 +55,42 @@ class AppPage extends StatelessWidget {
 }
 
 class AppScroll extends StatelessWidget {
-  const AppScroll({super.key, required this.children, this.maxWidth = 1000});
+  const AppScroll({super.key, required this.children, this.maxWidth = 1000, this.onRefresh});
   final List<Widget> children;
   final double maxWidth;
+  final Future<void> Function()? onRefresh;
 
   @override
-  Widget build(BuildContext context) => ListView(
-    padding: const EdgeInsets.all(24),
-    children: [
-      for (final child in children)
-        Align(
-          alignment: Alignment.topCenter,
-          child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: maxWidth),
-            child: child,
+  Widget build(BuildContext context) {
+    final scroll = CustomScrollView(
+      physics: onRefresh == null
+          ? null
+          : AlwaysScrollableScrollPhysics(
+              parent: context.isIOS ? const BouncingScrollPhysics() : const ClampingScrollPhysics(),
+            ),
+      slivers: [
+        if (context.isIOS && onRefresh != null) CupertinoSliverRefreshControl(onRefresh: onRefresh),
+        SliverPadding(
+          padding: const EdgeInsets.all(24),
+          sliver: SliverList.list(
+            children: [
+              for (final child in children)
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: maxWidth),
+                    child: child,
+                  ),
+                ),
+            ],
           ),
         ),
-    ],
-  );
+      ],
+    );
+    return !context.isIOS && onRefresh != null
+        ? RefreshIndicator(onRefresh: onRefresh!, child: scroll)
+        : scroll;
+  }
 }
 
 class AppButton extends StatelessWidget {
@@ -155,16 +173,16 @@ class AppIconButton extends StatelessWidget {
   final VoidCallback? onPressed;
 
   @override
-  Widget build(BuildContext context) => Tooltip(
-    message: label,
-    child: context.isIOS
-        ? CupertinoButton(
+  Widget build(BuildContext context) => context.isIOS
+      ? Tooltip(
+          message: label,
+          child: CupertinoButton(
             padding: const EdgeInsets.all(8),
             onPressed: onPressed,
             child: Semantics(label: label, button: true, child: Icon(icon, size: 24)),
-          )
-        : IconButton(tooltip: label, onPressed: onPressed, icon: Icon(icon)),
-  );
+          ),
+        )
+      : IconButton(tooltip: label, onPressed: onPressed, icon: Icon(icon));
 }
 
 class AppField extends StatelessWidget {
@@ -181,6 +199,7 @@ class AppField extends StatelessWidget {
     this.maxLength,
     this.autofillHints,
     this.focusNode,
+    this.suffix,
   });
   final TextEditingController controller;
   final String label;
@@ -193,6 +212,7 @@ class AppField extends StatelessWidget {
   final ValueChanged<String>? onSubmitted;
   final Iterable<String>? autofillHints;
   final FocusNode? focusNode;
+  final Widget? suffix;
 
   @override
   Widget build(BuildContext context) => Column(
@@ -206,6 +226,7 @@ class AppField extends StatelessWidget {
           placeholder: placeholder,
           keyboardType: keyboardType,
           obscureText: obscure,
+          suffix: suffix,
           onChanged: onChanged,
           onSubmitted: onSubmitted,
           autofocus: autofocus,
@@ -213,6 +234,7 @@ class AppField extends StatelessWidget {
           autofillHints: autofillHints,
           focusNode: focusNode,
           autocorrect: keyboardType == null && !obscure,
+          enableSuggestions: keyboardType != TextInputType.visiblePassword,
           padding: const EdgeInsets.all(15),
           style: context.text.bodyLarge,
           decoration: BoxDecoration(
@@ -226,6 +248,8 @@ class AppField extends StatelessWidget {
           controller: controller,
           keyboardType: keyboardType,
           obscureText: obscure,
+          autocorrect: keyboardType == null && !obscure,
+          enableSuggestions: keyboardType != TextInputType.visiblePassword,
           onChanged: onChanged,
           onSubmitted: onSubmitted,
           autofocus: autofocus,
@@ -234,6 +258,7 @@ class AppField extends StatelessWidget {
           focusNode: focusNode,
           decoration: InputDecoration(
             hintText: placeholder,
+            suffixIcon: suffix,
             counterText: '',
             filled: true,
             fillColor: context.colors.surfaceContainerLowest,

@@ -1,9 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:stockmate/app/router.dart';
 import 'package:stockmate/features/auth/application/session.dart';
+import 'package:stockmate/features/inventory/application/inventory_providers.dart';
 import 'package:stockmate/features/inventory/domain/inventory.dart';
 
 import 'support/test_app.dart';
@@ -62,6 +66,121 @@ Future<void> withApp(
 
 void main() {
   for (final platform in [TargetPlatform.iOS, TargetPlatform.android]) {
+    testWidgets('$platform: password visibility preserves text and selection', (tester) async {
+      await withApp(tester, (app) async {
+        await tapVisible(tester, find.text('Sign in'));
+        final field = find.byKey(const Key('passwordField'));
+        await tester.enterText(field, 'Test-password-123');
+        var editable = tester.widget<EditableText>(
+          find.descendant(of: field, matching: find.byType(EditableText)),
+        );
+        editable.controller.selection = const TextSelection.collapsed(offset: 4);
+        final controller = editable.controller;
+        expect(editable.obscureText, isTrue);
+        expect(editable.autocorrect, isFalse);
+        expect(editable.enableSuggestions, isFalse);
+        await tapVisible(tester, find.byTooltip('Show password'));
+        editable = tester.widget<EditableText>(
+          find.descendant(of: field, matching: find.byType(EditableText)),
+        );
+        expect(editable.obscureText, isFalse);
+        expect(controller.text, 'Test-password-123');
+        expect(controller.selection.baseOffset, 4);
+        expect(editable.autocorrect, isFalse);
+        expect(editable.enableSuggestions, isFalse);
+        await tapVisible(tester, find.byTooltip('Hide password'));
+        expect(
+          tester
+              .widget<EditableText>(find.descendant(of: field, matching: find.byType(EditableText)))
+              .obscureText,
+          isTrue,
+        );
+        expect(controller.text, 'Test-password-123');
+        expect(tester.takeException(), isNull);
+      }, platform: platform);
+    });
+
+    testWidgets('$platform: pull refresh works on empty content and retains data on failure', (
+      tester,
+    ) async {
+      await withApp(
+        tester,
+        (app) async {
+          final remote = Inventory(
+            id: 'remote',
+            branchId: 'branch',
+            branchName: 'Store',
+            title: 'Remote count',
+            createdAt: DateTime.utc(2026, 10, 30),
+            status: InventoryStatus.submitted,
+            lines: const [
+              CountLine(
+                productId: 'a',
+                name: 'Coffee',
+                sku: 'A',
+                barcode: '123',
+                expected: 8,
+                counted: 8,
+              ),
+            ],
+          );
+          app.gateway.submitted[remote.id] = remote;
+          final barrier = Completer<void>();
+          app.gateway.fetchBarrier = barrier;
+          final fetches = app.gateway.fetches;
+          try {
+            await tester.timedDrag(
+              find.byType(CustomScrollView),
+              const Offset(0, 400),
+              const Duration(seconds: 1),
+            );
+            for (var i = 0; i < 10 && app.gateway.fetches == fetches; i++) {
+              await tester.pump(const Duration(milliseconds: 100));
+            }
+            expect(app.gateway.fetches, fetches + 1);
+            expect(find.text('Synchronizing…'), findsOneWidget);
+            expect(find.text('Remote count'), findsNothing);
+          } finally {
+            barrier.complete();
+          }
+          await tester.pumpAndSettle();
+          expect(find.text('Remote count'), findsOneWidget);
+          app.gateway.fetchBarrier = null;
+
+          await tapVisible(tester, find.byKey(const Key('newInventory')));
+          await tester.enterText(find.byKey(const Key('inventoryName')), 'Local draft');
+          await tapVisible(tester, find.byKey(const Key('createInventory')));
+          await tapVisible(tester, find.byKey(const Key('product-A')));
+          await tester.enterText(find.byKey(const Key('quantityField')), '4');
+          await tapVisible(tester, find.byKey(const Key('saveCount')));
+          app.container.read(routerProvider).go('/inventories');
+          await tester.pumpAndSettle();
+          app.gateway.offline = true;
+          tester.state<ScrollableState>(find.byType(Scrollable).first).position.jumpTo(0);
+          await tester.pump();
+          final previousFetches = app.gateway.fetches;
+          await tester.timedDrag(
+            find.byType(CustomScrollView),
+            const Offset(0, 400),
+            const Duration(seconds: 1),
+          );
+          await tester.pumpAndSettle();
+          expect(app.gateway.fetches, previousFetches + 1);
+          expect(
+            find.text('Connection unavailable. Saved counts are safe on this device.'),
+            findsOneWidget,
+          );
+          final inventories = app.container.read(inventoriesProvider).requireValue;
+          expect(inventories.singleWhere((i) => i.title == 'Local draft').lines.first.counted, 4);
+          expect(inventories.any((i) => i.id == remote.id), isTrue);
+          expect(app.container.read(syncProvider).hasError, isTrue);
+          expect(tester.takeException(), isNull);
+        },
+        workspace: const Workspace.demo(),
+        platform: platform,
+      );
+    });
+
     testWidgets('$platform: demo → count → validate → review → submit', (tester) async {
       await withApp(tester, (app) async {
         expect(
@@ -140,7 +259,7 @@ void main() {
       await tapVisible(tester, find.byKey(const Key('leaveWorkspace')));
       await tester.tap(find.text('Leave demo').last);
       await tester.pumpAndSettle();
-      expect(find.text('Every shelf.\nAccounted for.'), findsOneWidget);
+      expect(find.byKey(const Key('enterDemo')), findsOneWidget);
       await tapVisible(tester, find.byKey(const Key('enterDemo')));
       await tapVisible(tester, find.text('Before sign out'));
       expect(tester.takeException(), isNull);
