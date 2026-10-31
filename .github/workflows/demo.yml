@@ -89,8 +89,16 @@ jobs:
           echo "id=$simulator_id" >> "$GITHUB_OUTPUT"
       - name: Device integration test
         if: matrix.platform == 'ios'
-        timeout-minutes: 12
-        run: flutter test integration_test/demo_flow_test.dart --reporter expanded -d '${{ steps.simulator.outputs.id }}'
+        timeout-minutes: 20
+        run: bash scripts/ci_ios_integration.sh '${{ steps.simulator.outputs.id }}'
+      - name: Upload iOS integration diagnostics
+        if: always() && matrix.platform == 'ios'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-integration-diagnostics
+          path: build/ios-integration/
+          if-no-files-found: ignore
+          retention-days: 7
       - run: bundle exec fastlane ${{ matrix.platform }} demo
         env:
           BUILD_NUMBER: ${{ github.run_number }}
