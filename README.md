@@ -6,7 +6,9 @@ An offline inventory app built with Flutter. Scan a product, record its quantity
 
 **[Download demo builds](https://github.com/Kwispy232/stockmate/releases)** · **[Browse the implementation plan](docs/implementation-plan.md)**
 
-<img src="docs/images/ios-welcome.jpg" alt="StockMate running in an iPhone simulator" width="280" />
+<a href="docs/media/stockmate-demo.mp4"><img src="docs/media/stockmate-demo.gif" alt="StockMate demo on iPhone Air: sign in, scan a barcode, count stock and submit an inventory" width="280" /></a>
+
+[Watch the demo video](docs/media/stockmate-demo.mp4)
 
 ## Run
 
