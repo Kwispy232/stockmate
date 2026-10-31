@@ -1,0 +1,1 @@
+<Text name="Text / IOS / ODHLÁSENIE" x={1560} y={2405} color="#DDE4E1" size={16} weight={600}>IOS / ODHLÁSENIE</Text>

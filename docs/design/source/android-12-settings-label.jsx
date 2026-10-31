@@ -1,0 +1,1 @@
+<Text name="Text / 12 SETTINGS" x={2600} y={1202} color="#DDE4E1" size={16} weight={600}>12 SETTINGS</Text>

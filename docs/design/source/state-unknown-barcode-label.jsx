@@ -1,0 +1,1 @@
+<Text name="Text / UNKNOWN BARCODE" x={520} y={1210} color="#DDE4E1" size={18} weight={600}>UNKNOWN BARCODE</Text>

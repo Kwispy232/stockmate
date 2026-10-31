@@ -1,0 +1,1 @@
+<Text name="Text / NAČÍTAVANIE" x={1560} y={1210} color="#DDE4E1" size={18} weight={600}>NAČÍTAVANIE</Text>

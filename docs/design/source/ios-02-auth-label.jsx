@@ -1,0 +1,1 @@
+<Text name="Text / 02 AUTH" x={520} y={102} color="#DDE4E1" size={16} weight={600}>02 AUTH</Text>

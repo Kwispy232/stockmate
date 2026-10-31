@@ -1,0 +1,1 @@
+<Text name="Text / AUTH ERROR" x={1040} y={1210} color="#DDE4E1" size={18} weight={600}>AUTH ERROR</Text>

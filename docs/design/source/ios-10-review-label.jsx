@@ -1,0 +1,1 @@
+<Text name="Text / 10 REVIEW" x={1560} y={1202} color="#DDE4E1" size={16} weight={600}>10 REVIEW</Text>

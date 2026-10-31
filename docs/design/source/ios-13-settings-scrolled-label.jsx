@@ -1,0 +1,1 @@
+<Text name="Text / 13 SETTINGS SCROLLED" y={2302} color="#DDE4E1" size={16} weight={600}>13 SETTINGS SCROLLED</Text>

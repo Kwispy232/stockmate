@@ -1,0 +1,153 @@
+<Frame name="06 · Detail inventúry" x={2600} y={140} w={412} h={924} bg="#F4F6F3" overflow="hidden" bind={{ "fills/0/color": "1074826698:35" }}>
+  <Frame name="System / Status bar" w={412} h={24} bg="#F4F6F3" bind={{ "fills/0/color": "1074826698:35" }}>
+    <Text name="Text / 9:41" x={18} y={4} color="#161D1C" size={12} font="Roboto" weight={600} bind={{ "fills/0/color": "1074826698:36" }}>9:41</Text>
+    <Frame name="System / Frame" x={320} y={7} flex="row" w={72} h={14} gap={6} items="center">
+      <Frame name="System / Signal strength" w={16} h={12}>
+        <Frame name="Signal / bar 1" y={9} w={3} h={3} bg="#161D1C" rounded={1} bind={{ "fills/0/color": "1074826698:36" }} />
+        <Frame name="Signal / bar 2" x={5} y={6} w={3} h={6} bg="#161D1C" rounded={1} bind={{ "fills/0/color": "1074826698:36" }} />
+        <Frame name="Signal / bar 3" x={10} y={3} w={3} h={9} bg="#161D1C" rounded={1} bind={{ "fills/0/color": "1074826698:36" }} />
+      </Frame>
+      <Frame name="Icon / wifi" w={13} h={13}>
+        <Frame name="Icon / Frame" w={13} h={13}>
+          <Vector name="path" w={13} h={13} stroke="#161D1C" strokeWidth={0.9208333333333333} strokeAlign="center" strokeCap="round" strokeJoin="round" constraints={{ horizontal: "scale", vertical: "scale" }} />
+        </Frame>
+      </Frame>
+      <Frame name="Frame / Frame" w={22} h={10} bg="#161D1C" rounded={2} bind={{ "fills/0/color": "1074826698:36" }} />
+    </Frame>
+  </Frame>
+  <Frame name="Layout / Ranná inventúra" y={24} w={412} h={56}>
+    <Frame name="Navigation / Ranná inventúra" w={412} h={56} bg="#F4F6F3" bind={{ "fills/0/color": "1074826698:35" }}>
+      <Text name="Text / Ranná inventúra" x={56} y={15} w={304} h={28} color="#161D1C" size={20} font="Roboto" weight={600} textAutoResize="none" bind={{ "fills/0/color": "1074826698:36" }}>Ranná inventúra</Text>
+      <Frame name="Icon / back" x={16} y={16} w={24} h={24}>
+        <Frame name="Icon / Frame" w={24} h={24}>
+          <Vector name="path" w={24} h={24} stroke="#161D1C" strokeWidth={1.7} strokeAlign="center" strokeCap="round" strokeJoin="round" constraints={{ horizontal: "scale", vertical: "scale" }} />
+        </Frame>
+      </Frame>
+      <Frame name="Icon / trash" x={372} y={16} w={24} h={24}>
+        <Frame name="Icon / Frame" w={24} h={24}>
+          <Vector name="path" w={24} h={24} stroke="#161D1C" strokeWidth={1.7} strokeAlign="center" strokeCap="round" strokeJoin="round" constraints={{ horizontal: "scale", vertical: "scale" }} />
+        </Frame>
+      </Frame>
+    </Frame>
+  </Frame>
+  <Frame name="Content / scroll" x={24} y={104} flex="col" w={364}>
+    <Frame name="Inventory / Summary" flex="col" w="fill" p={20} bg="#FFFFFF" stroke="#BEC9C6" strokeWidth={0.6} rounded={20} bind={{
+      "fills/0/color": "1074826698:40",
+      "strokes/0/color": "1074826698:44"
+    }}>
+      <Frame name="Status / Rozpracovaná" flex="row" py={6} px={10} bg="#9EF2E6" rounded={20} bind={{ "fills/0/color": "1074826698:33" }}>
+        <Text name="Text / Rozpracovaná" color="#005049" size={12} font="Roboto" weight="medium" bind={{ "fills/0/color": "1074826698:34" }}>Rozpracovaná</Text>
+      </Frame>
+      <Frame name="Space / 16" w={1} h={16} />
+      <Text name="Text / Bratislava · Centrum" w="fill" color="#161D1C" size={16} font="Roboto" weight="medium" bind={{ "fills/0/color": "1074826698:36" }}>Bratislava · Centrum</Text>
+      <Frame name="Space / 20" w={1} h={20} />
+      <Text name="Text / 12 / 30" color="#161D1C" size={28} font="Roboto" weight="bold" bind={{ "fills/0/color": "1074826698:36" }}>12 / 30</Text>
+      <Frame name="Space / 6" w={1} h={6} />
+      <Text name="Text / Spočítané 12 z 30" color="#161D1C" font="Roboto" bind={{ "fills/0/color": "1074826698:36" }}>Spočítané 12 z 30</Text>
+      <Frame name="Space / 16" w={1} h={16} />
+      <Frame name="Progress" w="fill" h={6} bg="#DDE4E1" rounded={4} bind={{ "fills/0/color": "1074826698:38" }}>
+        <Frame name="Rule / Divider" w={129} h={6} bg="#147D73" rounded={4} bind={{ "fills/0/color": "1074826698:31" }} />
+      </Frame>
+      <Frame name="Space / 16" w={1} h={16} />
+      <Text name="Text / 2 rozdiely" color="#161D1C" font="Roboto" bind={{ "fills/0/color": "1074826698:36" }}>2 rozdiely</Text>
+    </Frame>
+    <Frame name="Space / 16" w={1} h={16} />
+    <Frame name="ANDROID / Button / Primary / light" flex="row" h={52} w="fill" justify="center" items="center" bg="#147D73" rounded={14} bind={{ "fills/0/color": "1074826698:31" }}>
+      <Text name="Text / Skenovať kód" color="#FFFFFF" font="Roboto" weight="medium" bind={{ "fills/0/color": "1074826698:32" }}>Skenovať kód</Text>
+    </Frame>
+    <Frame name="Space / 10" w={1} h={10} />
+    <Frame name="ANDROID / Button / Secondary / light" flex="row" h={52} w="fill" justify="center" items="center" bg="#DDE4E1" rounded={14} bind={{ "fills/0/color": "1074826698:38" }}>
+      <Text name="Text / Skontrolovať inventúru" color="#161D1C" font="Roboto" weight="medium" bind={{ "fills/0/color": "1074826698:36" }}>Skontrolovať inventúru</Text>
+    </Frame>
+    <Frame name="Space / 10" w={1} h={10} />
+    <Frame name="ANDROID / Button / Secondary / light" flex="row" h={52} w="fill" justify="center" items="center" bg="#DDE4E1" rounded={14} bind={{ "fills/0/color": "1074826698:38" }}>
+      <Text name="Text / Zvyšné označiť nulou" color="#161D1C" font="Roboto" weight="medium" bind={{ "fills/0/color": "1074826698:36" }}>Zvyšné označiť nulou</Text>
+    </Frame>
+    <Frame name="Space / 24" w={1} h={24} />
+    <Frame name="Layout / Hľadať produkt alebo kód" flex="col" w="fill">
+      <Text name="Text / Hľadať produkt alebo kód" w="fill" color="#161D1C" font="Roboto" weight="medium" bind={{ "fills/0/color": "1074826698:36" }}>Hľadať produkt alebo kód</Text>
+      <Frame name="Space / 8" w={1} h={8} />
+      <Frame name="Field / Hľadať produkt alebo kód" flex="row" h={54} w="fill" items="center" p={15} bg="#FFFFFF" stroke="#6F7977" rounded={12} bind={{
+        "fills/0/color": "1074826698:40",
+        "strokes/0/color": "1074826698:43"
+      }}>
+        <Text name="Text / Empty field value" grow={1} color="#3F4947" size={16} font="Roboto" bind={{ "fills/0/color": "1074826698:37" }}>{" "}</Text>
+      </Frame>
+    </Frame>
+    <Frame name="Space / 16" w={1} h={16} />
+    <Frame name="Layout / Všetky" flex="row" h={40} w="fill" gap={8} items="center">
+      <Frame name="Filter / Všetky" flex="row" h={40} items="center" py={0} px={12} bg="#147D73" rounded={8} bind={{ "fills/0/color": "1074826698:31" }}>
+        <Text name="Text / Všetky" color="#FFFFFF" font="Roboto" weight="medium" bind={{ "fills/0/color": "1074826698:32" }}>Všetky</Text>
+      </Frame>
+      <Frame name="Filter / Nespočítané" flex="row" h={40} items="center" py={0} px={12} bg="#DDE4E1" rounded={8} bind={{ "fills/0/color": "1074826698:38" }}>
+        <Text name="Text / Nespočítané" color="#161D1C" font="Roboto" weight="medium" bind={{ "fills/0/color": "1074826698:36" }}>Nespočítané</Text>
+      </Frame>
+      <Frame name="Filter / Rozdiely" flex="row" h={40} items="center" py={0} px={12} bg="#DDE4E1" rounded={8} bind={{ "fills/0/color": "1074826698:38" }}>
+        <Text name="Text / Rozdiely" color="#161D1C" font="Roboto" weight="medium" bind={{ "fills/0/color": "1074826698:36" }}>Rozdiely</Text>
+      </Frame>
+    </Frame>
+    <Frame name="Space / 20" w={1} h={20} />
+    <Frame name="Product / SM-001" flex="col" w="fill" p={16} bg="#FFFFFF" stroke="#BEC9C6" strokeWidth={0.6} rounded={20} bind={{
+      "fills/0/color": "1074826698:40",
+      "strokes/0/color": "1074826698:44"
+    }}>
+      <Frame name="Layout / Coffee beans 250 g" flex="row" w="fill" gap={14} items="center">
+        <Frame name="Frame / Frame" flex="row" w={42} h={42} justify="center" items="center" bg="#9EF2E6" rounded={12} bind={{ "fills/0/color": "1074826698:33" }}>
+          <Frame name="Icon / check" w={22} h={22}>
+            <Frame name="Icon / Frame" w={22} h={22}>
+              <Vector name="path" w={22} h={22} stroke="#147D73" strokeWidth={1.5583333333333331} strokeAlign="center" strokeCap="round" strokeJoin="round" constraints={{ horizontal: "scale", vertical: "scale" }} />
+            </Frame>
+          </Frame>
+        </Frame>
+        <Frame name="Layout / Coffee beans 250 g" flex="col" grow={1}>
+          <Text name="Text / Coffee beans 250 g" w="fill" color="#161D1C" font="Roboto" weight="medium" bind={{ "fills/0/color": "1074826698:36" }}>Coffee beans 250 g</Text>
+          <Frame name="Space / 5" w={1} h={5} />
+          <Text name="Text / SM-001 · Evidované: 12" w="fill" color="#161D1C" size={12} font="Roboto" bind={{ "fills/0/color": "1074826698:36" }}>SM-001 · Evidované: 12</Text>
+        </Frame>
+        <Text name="Text / 8" color="#161D1C" size={22} font="Roboto" weight={600} bind={{ "fills/0/color": "1074826698:36" }}>8</Text>
+        <Frame name="Icon / chevron" w={18} h={18}>
+          <Frame name="Icon / Frame" w={18} h={18}>
+            <Vector name="path" w={18} h={18} stroke="#3F4947" strokeWidth={1.275} strokeAlign="center" strokeCap="round" strokeJoin="round" constraints={{ horizontal: "scale", vertical: "scale" }} />
+          </Frame>
+        </Frame>
+      </Frame>
+    </Frame>
+    <Frame name="Space / 8" w={1} h={8} />
+    <Frame name="Product / SM-002" flex="col" w="fill" p={16} bg="#FFFFFF" stroke="#BEC9C6" strokeWidth={0.6} rounded={20} bind={{
+      "fills/0/color": "1074826698:40",
+      "strokes/0/color": "1074826698:44"
+    }}>
+      <Frame name="Layout / Green tea 20 bags" flex="row" w="fill" gap={14} items="center">
+        <Frame name="Frame / Frame" flex="row" w={42} h={42} justify="center" items="center" bg="#DDE4E1" rounded={12} bind={{ "fills/0/color": "1074826698:38" }}>
+          <Frame name="Icon / box" w={22} h={22}>
+            <Frame name="Icon / Frame" w={22} h={22}>
+              <Vector name="path" w={22} h={22} stroke="#147D73" strokeWidth={1.5583333333333331} strokeAlign="center" strokeCap="round" strokeJoin="round" constraints={{ horizontal: "scale", vertical: "scale" }} />
+            </Frame>
+          </Frame>
+        </Frame>
+        <Frame name="Layout / Green tea 20 bags" flex="col" grow={1}>
+          <Text name="Text / Green tea 20 bags" w="fill" color="#161D1C" font="Roboto" weight="medium" bind={{ "fills/0/color": "1074826698:36" }}>Green tea 20 bags</Text>
+          <Frame name="Space / 5" w={1} h={5} />
+          <Text name="Text / SM-002 · Evidované: 18" w="fill" color="#161D1C" size={12} font="Roboto" bind={{ "fills/0/color": "1074826698:36" }}>SM-002 · Evidované: 18</Text>
+        </Frame>
+        <Text name="Text / —" color="#161D1C" size={22} font="Roboto" weight={600} bind={{ "fills/0/color": "1074826698:36" }}>—</Text>
+        <Frame name="Icon / chevron" w={18} h={18}>
+          <Frame name="Icon / Frame" w={18} h={18}>
+            <Vector name="path" w={18} h={18} stroke="#3F4947" strokeWidth={1.275} strokeAlign="center" strokeCap="round" strokeJoin="round" constraints={{ horizontal: "scale", vertical: "scale" }} />
+          </Frame>
+        </Frame>
+      </Frame>
+    </Frame>
+    <Frame name="Space / 8" w={1} h={8} />
+    <Frame name="Product / SM-003" flex="col" w="fill" p={16} bg="#FFFFFF" stroke="#BEC9C6" strokeWidth={0.6} rounded={20} bind={{
+      "fills/0/color": "1074826698:40",
+      "strokes/0/color": "1074826698:44"
+    }}>
+      <Frame name="Layout / Oat drink 1 l" flex="row" w="fill" gap={14} items="center">
+        <Frame name="Frame / Frame" flex="row" w={42} h={42} justify="center" items="center" bg="#9EF2E6" rounded={12} bind={{ "fills/0/color": "1074826698:33" }}>
+          <Frame name="Icon / check" w={22} h={22}>
+            <Frame name="Icon / Frame" w={22} h={22}>
+              <Vector name="path" w={22} h={22} stroke="#147D73" strokeWidth={1.5583333333333331} strokeAlign="center" strokeCap="round" strokeJoin="round" constraints={{ horizontal: "scale", vertical: "scale" }} />
+            </Frame>
+          </Frame>
+        <

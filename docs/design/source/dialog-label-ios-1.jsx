@@ -1,0 +1,1 @@
+<Text name="Text / IOS / DOPLNENIE NÚL" x={520} y={2405} color="#DDE4E1" size={16} weight={600}>IOS / DOPLNENIE NÚL</Text>

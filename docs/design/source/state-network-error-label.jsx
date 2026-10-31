@@ -1,0 +1,1 @@
+<Text name="Text / CHYBA NAČÍTANIA" x={2080} y={1210} color="#DDE4E1" size={18} weight={600}>CHYBA NAČÍTANIA</Text>

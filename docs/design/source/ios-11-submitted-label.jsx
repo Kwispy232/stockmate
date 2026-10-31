@@ -1,0 +1,1 @@
+<Text name="Text / 11 SUBMITTED" x={2080} y={1202} color="#DDE4E1" size={16} weight={600}>11 SUBMITTED</Text>

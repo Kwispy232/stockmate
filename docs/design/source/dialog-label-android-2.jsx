@@ -1,0 +1,1 @@
+<Text name="Text / ANDROID / VYMAZANIE" x={1040} y={2825} color="#DDE4E1" size={16} weight={600}>ANDROID / VYMAZANIE</Text>

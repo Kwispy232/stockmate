@@ -1,0 +1,1 @@
+<Text name="Text / 04 LIST" x={1560} y={102} color="#DDE4E1" size={16} weight={600}>04 LIST</Text>

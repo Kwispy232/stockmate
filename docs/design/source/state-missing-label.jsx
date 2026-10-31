@@ -1,0 +1,1 @@
+<Text name="Text / NENÁJDENÝ ZÁZNAM" x={2080} y={110} color="#DDE4E1" size={18} weight={600}>NENÁJDENÝ ZÁZNAM</Text>

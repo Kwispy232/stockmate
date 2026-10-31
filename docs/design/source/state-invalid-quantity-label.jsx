@@ -1,0 +1,1 @@
+<Text name="Text / INVALID QUANTITY" x={1560} y={110} color="#DDE4E1" size={18} weight={600}>INVALID QUANTITY</Text>

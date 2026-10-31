@@ -1,0 +1,1 @@
+<Text name="Text / 09 SCANNER" x={1040} y={1202} color="#DDE4E1" size={16} weight={600}>09 SCANNER</Text>

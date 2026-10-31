@@ -1,0 +1,1 @@
+<Text name="Text / 08 COUNT EDITOR" x={520} y={1202} color="#DDE4E1" size={16} weight={600}>08 COUNT EDITOR</Text>

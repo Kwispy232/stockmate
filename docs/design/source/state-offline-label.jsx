@@ -1,0 +1,1 @@
+<Text name="Text / OFFLINE" y={110} color="#DDE4E1" size={18} weight={600}>OFFLINE</Text>

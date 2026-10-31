@@ -1,0 +1,1 @@
+<Text name="Text / CELÝ OBSAH / DETAIL" x={1040} y={2300} color="#DDE4E1" size={16} weight={600}>CELÝ OBSAH / DETAIL</Text>
