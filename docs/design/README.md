@@ -27,7 +27,7 @@ The Flutter app implements the simplified welcome screen, password visibility, a
 
 ## Sharing
 
-[Open the live OpenPencil room](https://app.openpencil.dev/share/1rw1hpysg2m5nm7tsg3onc2oznc57tcz) or [download the editable file](https://github.com/Kwispy232/stockmate/raw/refs/heads/codex/design-handoff/docs/design/StockMate.fig).
+[Open the live OpenPencil room](https://app.openpencil.dev/share/1rw1hpysg2m5nm7tsg3onc2oznc57tcz) or [download the editable file](https://github.com/Kwispy232/stockmate/raw/refs/heads/main/docs/design/StockMate.fig).
 
 The live room was verified from a second browser. Anyone with its link can join and edit, while at least one participant with a copy is online. The download works independently of the room. Browser clients may substitute the local Helvetica Neue faces used by iOS frames; the desktop file was checked with those fonts installed. OpenPencil documents its peer-to-peer room behavior in the [collaboration guide](https://openpencil.dev/programmable/collaboration).
 

@@ -35,7 +35,7 @@ The local demo simulates transport failures. The authenticated workspace uses re
 
 ## Design
 
-[Open the shared OpenPencil room](https://app.openpencil.dev/share/1rw1hpysg2m5nm7tsg3onc2oznc57tcz) · [Download the editable design](https://github.com/Kwispy232/stockmate/raw/refs/heads/codex/design-handoff/docs/design/StockMate.fig)
+[Open the shared OpenPencil room](https://app.openpencil.dev/share/1rw1hpysg2m5nm7tsg3onc2oznc57tcz) · [Download the editable design](https://github.com/Kwispy232/stockmate/raw/refs/heads/main/docs/design/StockMate.fig)
 
 The live room needs at least one participant with the document online. The downloadable `.fig` is always available from this repository. See [the design handoff](docs/design/README.md) for editing notes.
 

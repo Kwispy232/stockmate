@@ -7,7 +7,7 @@ Firebase project: **[StockMate](https://console.firebase.google.com/project/stoc
 - A PR to `develop` or `main` checks generated files, formatting, analysis, unit/widget/signing-helper tests, and the isolated database.
 - A push to either branch also builds the Android APK and iOS simulator ZIP and runs the native iOS integration test.
 - With repository variable `FIREBASE_DISTRIBUTION_ENABLED=true`, a successful push additionally builds a signed universal Android APK and an Ad Hoc iPhone IPA, then uploads them through fastlane to the `demo-reviewers` Firebase group.
-- Manual **Run workflow → distribute** runs the same verified distribution without merging. OIDC allows only `main`, `develop`, and the initial `codex/design-handoff` setup branch, from this repository's `demo.yml` workflow. Remove the setup branch from the provider condition after merging.
+- Manual **Run workflow → distribute** runs the same verified distribution without merging. OIDC allows only `main` and `develop`, from this repository's `demo.yml` workflow. The temporary setup branch was removed from the provider condition after verification.
 - A push to `main` publishes the existing GitHub demo prerelease after all requested jobs pass. Firebase stays optional when its enable flag is absent. A requested distribution with missing settings fails explicitly.
 
 Signed artifacts remain in Actions for 14 days. Source/version/build number and SHA-256 manifests accompany them. The job summary links to the Firebase tester release. Native iOS jobs use `macos-15-intel` and Xcode 16.4 for a reproducible simulator environment. Integration diagnostics include verbose Flutter output, JSON test events, simulator logs, final screenshot, and available Runner crash reports; retained for 7 days.
