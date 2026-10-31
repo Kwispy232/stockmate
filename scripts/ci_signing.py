@@ -51,6 +51,8 @@ def validate_profile(profile, team):
         raise ValueError('The provisioning profile does not authorize StockMate.')
     if entitlements.get('get-task-allow') or not profile.get('ProvisionedDevices'):
         raise ValueError('An Ad Hoc distribution profile with registered devices is required.')
+    if profile.get('IsXcodeManaged'):
+        raise ValueError('Create a manually managed Ad Hoc profile for CI in Apple Developer.')
     if profile['ExpirationDate'].replace(tzinfo=timezone.utc) <= datetime.now(timezone.utc):
         raise ValueError('The provisioning profile has expired.')
     return profile['UUID'], profile['Name']

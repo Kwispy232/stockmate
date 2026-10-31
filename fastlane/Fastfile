@@ -89,21 +89,31 @@ platform :ios do
     require_settings('IOS_TEAM_ID', 'IOS_PROFILE_NAME')
     sh('flutter', 'build', 'ios', '--release', '--no-codesign', '--config-only',
        '--build-number', ENV.fetch('BUILD_NUMBER', '1'))
-    build_app(
-      workspace: 'ios/Runner.xcworkspace',
-      scheme: 'Runner',
-      configuration: 'Release',
-      output_directory: File.dirname(artifact_path('StockMate-ios.ipa')),
-      output_name: 'StockMate-ios.ipa',
-      archive_path: 'build/ios/archive/Runner.xcarchive',
-      export_method: 'ad-hoc',
-      export_options: {
-        method: 'release-testing', signingStyle: 'manual', teamID: ENV.fetch('IOS_TEAM_ID'),
-        provisioningProfiles: { 'dev.sebastianmraz.stockmate' => ENV.fetch('IOS_PROFILE_NAME') }
-      },
-      xcargs: "DEVELOPMENT_TEAM=#{ENV.fetch('IOS_TEAM_ID').shellescape} CODE_SIGN_STYLE=Manual CODE_SIGN_IDENTITY='Apple Distribution' PROVISIONING_PROFILE_SPECIFIER=#{ENV.fetch('IOS_PROFILE_NAME').shellescape}",
-      buildlog_path: 'build/ios/logs'
-    )
+    project = File.expand_path('../ios/Runner.xcodeproj/project.pbxproj', __dir__)
+    original_project = File.binread(project)
+    begin
+      update_code_signing_settings(
+        path: 'ios/Runner.xcodeproj', targets: ['Runner'], build_configurations: ['Release'],
+        use_automatic_signing: false, team_id: ENV.fetch('IOS_TEAM_ID'),
+        code_sign_identity: 'Apple Distribution', profile_name: ENV.fetch('IOS_PROFILE_NAME')
+      )
+      build_app(
+        workspace: 'ios/Runner.xcworkspace',
+        scheme: 'Runner',
+        configuration: 'Release',
+        output_directory: File.dirname(artifact_path('StockMate-ios.ipa')),
+        output_name: 'StockMate-ios.ipa',
+        archive_path: 'build/ios/archive/Runner.xcarchive',
+        export_method: 'ad-hoc',
+        export_options: {
+          method: 'release-testing', signingStyle: 'manual', teamID: ENV.fetch('IOS_TEAM_ID'),
+          provisioningProfiles: { 'dev.sebastianmraz.stockmate' => ENV.fetch('IOS_PROFILE_NAME') }
+        },
+        buildlog_path: 'build/ios/logs'
+      )
+    ensure
+      File.binwrite(project, original_project)
+    end
     record_artifact('ios', 'StockMate-ios.ipa', manifest: 'ios-device-build.json')
   end
 

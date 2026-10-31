@@ -22,7 +22,7 @@ class SigningTests(unittest.TestCase):
 
     def test_rejects_wrong_team_app_development_expired_and_device_free_profiles(self):
         invalid = []
-        for key, value in [('TeamIdentifier', ['OTHER']), ('ProvisionedDevices', []),
+        for key, value in [('TeamIdentifier', ['OTHER']), ('ProvisionedDevices', []), ('IsXcodeManaged', True),
                            ('ExpirationDate', datetime.now(timezone.utc) - timedelta(days=1))]:
             profile = deepcopy(self.profile)
             profile[key] = value

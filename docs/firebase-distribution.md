@@ -10,7 +10,7 @@ Firebase project: **[StockMate](https://console.firebase.google.com/project/stoc
 - Manual **Run workflow → distribute** runs the same verified distribution without merging. OIDC allows only `main`, `develop`, and the initial `codex/design-handoff` setup branch, from this repository's `demo.yml` workflow. Remove the setup branch from the provider condition after merging.
 - A push to `main` publishes the existing GitHub demo prerelease after all requested jobs pass. Firebase stays optional when its enable flag is absent. A requested distribution with missing settings fails explicitly.
 
-Signed artifacts remain in Actions for 14 days. Source/version/build number and SHA-256 manifests accompany them. The job summary links to the Firebase tester release. Integration diagnostics include verbose Flutter output, JSON test events, simulator logs, final screenshot, and available Runner crash reports; retained for 7 days.
+Signed artifacts remain in Actions for 14 days. Source/version/build number and SHA-256 manifests accompany them. The job summary links to the Firebase tester release. Native iOS jobs use `macos-15-intel` and Xcode 16.4 for a reproducible simulator environment. Integration diagnostics include verbose Flutter output, JSON test events, simulator logs, final screenshot, and available Runner crash reports; retained for 7 days.
 
 ## GitHub configuration
 
@@ -33,9 +33,11 @@ Signed artifacts remain in Actions for 14 days. Source/version/build number and 
 | `ANDROID_KEY_PASSWORD` | Private key password |
 | `IOS_CERTIFICATE_BASE64` | Base64 of the selected Apple Distribution identity exported as password-protected `.p12` |
 | `IOS_CERTIFICATE_PASSWORD` | `.p12` export password |
-| `IOS_PROFILE_BASE64` | Base64 of an unexpired Ad Hoc provisioning profile for this app/team, including tester UDIDs |
+| `IOS_PROFILE_BASE64` | Base64 of an unexpired manually managed Ad Hoc provisioning profile for this app/team, including tester UDIDs |
 
 The service account has only `roles/firebaseappdistro.admin` on this project. GitHub impersonates it using short-lived OIDC credentials; there is no stored Google service-account key or personal Firebase token. The provider checks immutable repository/owner IDs plus workflow, event, and branch. Authentication runs immediately before the upload, after the build, so credentials are fresh.
+
+The dedicated Apple profile is `StockMate Firebase AdHoc`, initially containing the iPhone Air. Regenerate it when adding testers; do not use an Xcode-managed profile for manual CI signing.
 
 Signing material is decoded only in an ephemeral runner directory. iOS uses a temporary keychain and validates the profile's team, application identifier, expiry, distribution entitlement, and registered devices. Cleanup restores the previous keychain list and removes the temporary profile and files, including after failure. Android Firebase builds use one stable signing key so subsequent demos can update existing installations. Older debug-signed APKs must be uninstalled once before installing the Firebase build.
 
