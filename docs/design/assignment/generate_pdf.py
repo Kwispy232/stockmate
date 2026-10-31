@@ -19,7 +19,6 @@ INK = colors.HexColor("#153F3A")
 TEAL = colors.HexColor("#147D75")
 LIME = colors.HexColor("#DEFFA2")
 CREAM = colors.HexColor("#F5F6F0")
-MUTED = colors.HexColor("#51645F")
 RULE = colors.HexColor("#CDD9D2")
 WHITE = colors.white
 
@@ -62,23 +61,11 @@ def label(text, x, y, color=TEAL, size=10.5):
     C.restoreState()
 
 
-def footer(number, dark=False):
-    color = colors.HexColor("#ACCAC1") if dark else MUTED
-    C.setStrokeColor(colors.HexColor("#41665D") if dark else RULE)
-    C.setLineWidth(0.6)
-    C.line(MARGIN, 39, WIDTH - MARGIN, 39)
-    C.setFillColor(color)
-    C.setFont("Brief", 9)
-    C.drawString(MARGIN, 22, "StockMate / Zadanie portfóliového projektu")
-    C.drawRightString(WIDTH - MARGIN, 22, f"{number:02d} / 08")
-
-
-def page(number, title, eyebrow, background=CREAM):
+def page(title, eyebrow, background=CREAM):
     C.setFillColor(background)
     C.rect(0, 0, WIDTH, HEIGHT, fill=True, stroke=False)
     label(eyebrow.upper(), MARGIN, 493)
     paragraph(title, MARGIN, 465, 848, size=35, leading=42, bold=True)
-    footer(number)
 
 
 def proof(text):
@@ -115,21 +102,19 @@ paragraph("StockMate", MARGIN - 3, 414, 848, size=78, leading=89, color=WHITE, b
 paragraph("Zadanie portfóliového projektu", MARGIN, 301, 848, size=31, leading=39, color=WHITE)
 paragraph("Mobilná aplikácia na inventúry", MARGIN, 238, 800, size=24, leading=31, color=LIME)
 paragraph("Vytvor zrozumiteľný pracovný proces, ktorý spoľahlivo uchová počítanie aj pri výpadku pripojenia.", MARGIN, 167, 720, size=20, leading=29, color=colors.HexColor("#D4E2DC"))
-footer(1, dark=True)
 C.showPage()
 
 # 2
-page(2, "Cieľ a rozsah", "Zámer projektu")
+page("Cieľ a rozsah", "Zámer projektu")
 paragraph("Vytvor aplikáciu, v ktorej pracovník predajne spočíta skutočné množstvá produktov a odovzdá overiteľný inventúrny záznam.", MARGIN, 392, 814, size=23, leading=32)
 paragraph("Pracovné prostredie", MARGIN, 280, 380, size=21, bold=True)
 paragraph("Aspoň dve ukážkové predajne s katalógom produktov. Každý produkt má názov, interný kód, čiarový kód a evidované množstvo.", MARGIN, 242, 384, size=18, leading=26)
 paragraph("Dva spôsoby vyskúšania", 507, 280, 397, size=21, bold=True)
 paragraph("Lokálne demo bez účtu a pripojenia. Prihlásený pracovný priestor s reálnym uložením odoslaných inventúr a súkromím používateľa.", 507, 242, 397, size=18, leading=26)
-paragraph("Hranica zadania: inventúra zaznamená rozdiely. Automatické prepísanie skladových zásob, správa pohybov a publikovanie do obchodov nie sú súčasťou jadra.", MARGIN, 111, 848, size=14.5, leading=20, color=MUTED)
 C.showPage()
 
 # 3
-page(3, "Hlavný používateľský tok", "Funkčné zadanie", background=WHITE)
+page("Hlavný používateľský tok", "Funkčné zadanie", background=WHITE)
 numbered_row(1, "Vstup do aplikácie", "Umožni vyskúšať demo alebo sa zaregistrovať a prihlásiť do vlastného pracovného priestoru.", 391)
 numbered_row(2, "Nová inventúra", "Používateľ vyberie predajňu a zadá názov. Inventúra si uchová východiskový stav katalógu.", 326)
 numbered_row(3, "Počítanie produktov", "Produkt nájde skenerom, vyhľadávaním alebo ručným kódom. Zadá celé nezáporné množstvo; prázdne pole sa odlišuje od nuly.", 261, height=78)
@@ -137,15 +122,7 @@ numbered_row(4, "Kontrola a odovzdanie", "Zobraz rozdiely a nedopočítané polo
 C.showPage()
 
 # 4
-page(4, "Práca bez pripojenia", "Spoľahlivosť údajov")
-numbered_row(1, "Uchovanie práce", "Rozpracovaná inventúra a už potvrdené množstvá musia prežiť ukončenie aj opätovné otvorenie aplikácie.", 389, height=78)
-numbered_row(2, "Čakajúce odoslanie", "Pri výpadku spojenia uchovaj kompletnú inventúru vo fronte a jasne odlíš čakanie od úspešného odoslania.", 309, height=78)
-numbered_row(3, "Bezpečné opakovanie", "Po návrate pripojenia umožni opakovanie. Aj pri stratenej odpovedi musí vzniknúť iba jeden odoslaný záznam.", 229, height=78)
-proof("Premyslené správanie pri zlyhaní, trvalé uloženie práce a konzistentné odoslanie.")
-C.showPage()
-
-# 5
-page(5, "Rozhranie a prístup k údajom", "Použiteľnosť")
+page("Rozhranie a prístup k údajom", "Použiteľnosť")
 paragraph("Rozhranie pre človeka", MARGIN, 391, 393, size=22, bold=True)
 paragraph("Rešpektuj zvyklosti iOS a Androidu. Zachovaj prehľadnú navigáciu, čitateľnú typografiu a ovládanie pri väčšom texte.", MARGIN, 347, 393, size=18, leading=26)
 paragraph("Priprav slovenčinu a angličtinu, svetlý aj tmavý vzhľad. Rieš načítanie, prázdny obsah, chyby a zamietnutý prístup ku kamere.", MARGIN, 241, 393, size=18, leading=26)
@@ -154,27 +131,28 @@ C.line(476, 389, 476, 150)
 paragraph("Oddelené pracovné priestory", 507, 391, 397, size=22, bold=True)
 paragraph("Demo údaje a účty sa nesmú miešať. Používateľ môže čítať len dostupné predajne a vlastné odoslané inventúry.", 507, 347, 397, size=18, leading=26)
 paragraph("Prístupové pravidlá overuj aj mimo obrazoviek. Čakajúce a odoslané záznamy zostávajú uzamknuté.", 507, 241, 397, size=18, leading=26)
-proof("Cit pre používanie aplikácie a dôsledné hranice prístupu k údajom.")
+C.showPage()
+
+# 5
+page("Čo overiť", "Kvalita riešenia", background=WHITE)
+top = 391
+for text in [
+    "Over, že aplikácia rozlišuje prázdnu hodnotu od nuly, odmieta neplatné množstvá a správne vypočíta rozdiely aj úplnosť inventúry. Uložené počítanie a čakajúce odoslanie sa musia obnoviť po novom spustení aplikácie.",
+    "Vyskúšaj výpadok spojenia aj stratenú odpoveď pri odosielaní. Nesmú viesť k strate údajov ani k duplicitnému záznamu. Over tiež, že cudzí účet nemá prístup k súkromným inventúram a konečný záznam nemožno prepísať.",
+    "Na zariadení prejdi celý tok od vytvorenia inventúry cez skenovanie a kontrolu až po odoslanie. Skontroluj ovládanie na iOS aj Androide, oba jazyky a ručné zadanie kódu bez kamery.",
+]:
+    top = paragraph(text, MARGIN, top, 848, size=19, leading=28) - 22
 C.showPage()
 
 # 6
-page(6, "Čo overiť", "Kvalita riešenia", background=WHITE)
-numbered_row(1, "Pravidlá počítania", "Prázdna hodnota verzus nula, neplatné množstvá, správne rozdiely a úplnosť inventúry.", 391, height=57)
-numbered_row(2, "Obnova po ukončení", "Uložené počítanie aj čakajúce odoslanie sa obnovia po novom spustení aplikácie.", 333, height=57)
-numbered_row(3, "Opakované odoslanie", "Výpadok spojenia alebo stratená odpoveď nespôsobia stratu údajov ani duplicitný záznam.", 275, height=57)
-numbered_row(4, "Hranice prístupu", "Cudzí účet sa nedostane k súkromným inventúram a konečný záznam nemožno prepísať.", 217, height=57)
-numbered_row(5, "Celý tok na zariadení", "Prejdi vytvorenie, skenovanie, kontrolu a odoslanie. Over oba štýly ovládania, jazyky a ručný vstup bez kamery.", 159, height=70)
-C.showPage()
-
-# 7
-page(7, "Čo odovzdať", "Výsledný výstup")
+page("Čo odovzdať", "Výsledný výstup")
 numbered_row(1, "Verejný repozitár", "Dodaj čistý zdrojový kód s postupnou históriou zmien a návodom na spustenie, overenie a vyskúšanie hlavného toku.", 389, height=80)
 numbered_row(2, "Spustiteľnú ukážku", "Priprav demo s ukážkovými údajmi aj prihlásený režim. Prilož zostavenia na vyskúšanie a jasne pomenuj hranice rozsahu.", 307, height=80)
 numbered_row(3, "Opakovateľné overenie", "Zmeny musia prejsť automatickými kontrolami a zostavením. Výstupy musia byť priraditeľné ku konkrétnej verzii kódu.", 225, height=80)
 proof("Schopnosť odovzdať riešenie, ktoré vie ďalší človek spustiť, overiť a posúdiť.")
 C.showPage()
 
-# 8
+# 7
 C.setFillColor(INK)
 C.rect(0, 0, WIDTH, HEIGHT, fill=True, stroke=False)
 label("ZMYSEL ZADANIA", MARGIN, 493, color=LIME)
@@ -188,7 +166,6 @@ capabilities = [
 for title, body, x, top in capabilities:
     paragraph(title, x, top, 397, size=23, leading=30, color=LIME, bold=True)
     paragraph(body, x, top - 47, 397, size=19, leading=27, color=WHITE)
-footer(8, dark=True)
 C.showPage()
 C.save()
 print(OUTPUT)

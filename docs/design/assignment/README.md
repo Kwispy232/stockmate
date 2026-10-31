@@ -8,7 +8,7 @@ python3 docs/design/assignment/generate_pdf.py
 ```
 
 Requires ReportLab and either Arial (macOS) or DejaVu Sans (Linux). The output
-has eight landscape pages at 960 x 540 points, matching the 16:9 presentation
+has seven landscape pages at 960 x 540 points, matching the 16:9 presentation
 ratio. Text stays selectable and fonts are embedded.
 
 The brief describes the inventory app's scope, required behavior, verification,

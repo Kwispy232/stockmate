@@ -27,4 +27,4 @@ Some editor versions expose Figma's empty `Internal Only Canvas` when importing 
 
 ## Assignment PDF
 
-The separate assignment is at `output/pdf/stockmate-zadanie.pdf`. Its 8 pages use a 16:9 format. Editable PDF generation sources and regeneration instructions are in `assignment/`.
+The separate assignment is at `output/pdf/stockmate-zadanie.pdf`. Its 7 pages use a 16:9 format. Editable PDF generation sources and regeneration instructions are in `assignment/`.
